@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0,
+maximum-scale=1.0, user-scalable=no">
 
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      maximum-scale=1.0,
-      user-scalable=no">
-
-<title>SKY BIRD</title>
-
-<style>
+<title>SKY BIRD</title><style>
 
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-    touch-action:none;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -26,6 +20,10 @@ html,body{
     overflow:hidden;
     background:#70c5ce;
     font-family:Arial,sans-serif;
+}
+
+body{
+    overscroll-behavior:none;
 }
 
 #game{
@@ -40,7 +38,7 @@ html,body{
     display:none;
     position:fixed;
     inset:0;
-    z-index:999;
+    z-index:9999;
     background:#111;
     color:white;
     align-items:center;
@@ -65,6 +63,11 @@ html,body{
     }
 }
 
+
+/* =========================
+   MENU
+========================= */
+
 #menu{
     position:fixed;
     inset:0;
@@ -80,11 +83,13 @@ html,body{
             #58c8e8,
             #b9f2ff
         );
+
+    overflow:auto;
 }
 
 #menu h1{
     color:white;
-    font-size:clamp(40px,8vw,75px);
+    font-size:clamp(42px,8vw,75px);
     text-shadow:4px 4px #333;
     margin-bottom:5px;
 }
@@ -95,18 +100,23 @@ html,body{
     margin:5px;
 }
 
+
+/* =========================
+   SKINS
+========================= */
+
 #skins{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    gap:7px;
+    gap:8px;
     max-width:900px;
-    padding:8px;
+    padding:10px;
 }
 
 .skin{
-    min-width:120px;
-    padding:9px;
+    min-width:125px;
+    padding:10px;
 
     border:3px solid white;
     border-radius:12px;
@@ -114,8 +124,10 @@ html,body{
     background:#222;
     color:white;
 
-    font-size:15px;
+    font-size:16px;
     font-weight:bold;
+
+    cursor:pointer;
 }
 
 .skin.selected{
@@ -127,41 +139,76 @@ html,body{
     opacity:.4;
 }
 
-.menuButtons{
+
+/* =========================
+   MAPA + JOGAR
+========================= */
+
+#playArea{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:10px;
-    margin-top:10px;
+    gap:12px;
+    margin-top:8px;
+    flex-wrap:wrap;
 }
 
+#mapBox{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#mapButton{
+    padding:14px 18px;
+
+    border:3px solid white;
+    border-radius:15px;
+
+    background:#2867c7;
+    color:white;
+
+    font-size:18px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+#mapButton.locked{
+    background:#555;
+    opacity:.6;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
 .button{
-    padding:13px 28px;
+    padding:14px 35px;
 
     border:0;
-    border-radius:14px;
+    border-radius:15px;
 
     background:#35b84a;
     color:white;
 
-    font-size:21px;
+    font-size:24px;
     font-weight:bold;
+
+    cursor:pointer;
 }
 
-.mapButton{
-    background:#2878ff;
-    min-width:180px;
-}
 
-.mapButton.locked{
-    background:#555;
-}
+/* =========================
+   HUD
+========================= */
 
 #score{
     position:fixed;
     z-index:5;
 
-    top:10px;
+    top:12px;
     left:50%;
 
     transform:translateX(-50%);
@@ -179,8 +226,8 @@ html,body{
     position:fixed;
     z-index:5;
 
-    top:15px;
-    left:18px;
+    top:18px;
+    left:20px;
 
     display:none;
 
@@ -190,6 +237,11 @@ html,body{
 
     text-shadow:3px 3px #333;
 }
+
+
+/* =========================
+   GAME OVER
+========================= */
 
 #gameOver{
     position:fixed;
@@ -204,6 +256,8 @@ html,body{
 
     background:rgba(0,0,0,.6);
     color:white;
+
+    text-align:center;
 }
 
 #gameOver h2{
@@ -216,98 +270,104 @@ html,body{
     margin:6px;
 }
 
-</style>
-</head>
+#gameOver .button{
+    margin-top:10px;
+}
 
-<body>
 
-<canvas id="game"></canvas>
+/* =========================
+   CELULAR DEITADO
+========================= */
+
+@media (orientation:portrait){
+
+    #rotate{
+        display:flex;
+    }
+
+}
+
+</style></head><body><canvas id="game"></canvas>
 
 <div id="rotate">
     📱<br><br>
     VIRE O CELULAR DE LADO<br>
     PARA JOGAR SKY BIRD
-</div>
-
-<div id="score">0</div>
-
-<div id="coinHud">
+</div><div id="score">0</div><div id="coinHud">
     🪙 <span id="coins">0</span>
-</div>
+</div><!-- =========================
+     MENU
+========================= --><div id="menu"><h1>🐦 SKY BIRD</h1>
 
-<div id="menu">
+<p>Escolha seu pássaro</p>
 
-    <h1>🐦 SKY BIRD</h1>
+<p>
+    🏆 Recorde:
+    <span id="best">0</span>
 
-    <p>Escolha seu pássaro</p>
+    &nbsp;&nbsp;
 
-    <p>
-        🏆 Recorde:
-        <span id="best">0</span>
-        &nbsp;&nbsp;
-        🪙:
-        <span id="totalCoins">0</span>
-    </p>
+    🪙:
+    <span id="totalCoins">0</span>
+</p>
 
-    <div id="skins"></div>
+<div id="skins"></div>
 
-    <div class="menuButtons">
 
-        <button
-            class="button"
-            id="start">
-            JOGAR
-        </button>
+<div id="playArea">
 
-        <button
-            class="button mapButton"
-            id="mapButton">
-            🌤️ NORMAL
+    <div id="mapBox">
+
+        <button id="mapButton">
+            🌤️ MAPA NORMAL
         </button>
 
     </div>
 
-</div>
-
-<div id="gameOver">
-
-    <h2>GAME OVER</h2>
-
-    <p>
-        Pontuação:
-        <span id="finalScore">0</span>
-    </p>
-
-    <p>
-        Recorde:
-        <span id="finalBest">0</span>
-    </p>
-
-    <p>
-        🪙 Moedas:
-        <span id="finalCoins">0</span>
-    </p>
-
     <button
         class="button"
-        id="restart">
-        JOGAR NOVAMENTE
-    </button>
-
-    <button
-        class="button"
-        id="backMenu"
-        style="background:#555;margin-top:8px;">
-        MENU
+        id="start">
+        JOGAR
     </button>
 
 </div>
 
-<script>
+</div><!-- =========================
+     GAME OVER
+========================= --><div id="gameOver"><h2>GAME OVER</h2>
 
-/* =====================================================
+<p>
+    Pontuação:
+    <span id="finalScore">0</span>
+</p>
+
+<p>
+    Recorde:
+    <span id="finalBest">0</span>
+</p>
+
+<p>
+    🪙 Moedas:
+    <span id="finalCoins">0</span>
+</p>
+
+<button
+    class="button"
+    id="restart">
+    JOGAR NOVAMENTE
+</button>
+
+<button
+    class="button"
+    id="backMenu">
+    MENU
+</button>
+
+</div><script>
+
+/* ==================================================
    CANVAS
-===================================================== */
+================================================== */
 
 const canvas =
     document.getElementById("game");
@@ -320,11 +380,8 @@ let H = 0;
 
 function resize(){
 
-    W = window.innerWidth;
-    H = window.innerHeight;
-
-    canvas.width = W;
-    canvas.height = H;
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
 
 }
 
@@ -336,15 +393,16 @@ window.addEventListener(
 );
 
 
-/* =====================================================
+/* ==================================================
    SKINS
-===================================================== */
+================================================== */
 
 const skins = [
 
     {
         name:"🐦 Comum",
         unlock:0,
+        cost:0,
         body:"#ffd21f",
         wing:"#e5aa00"
     },
@@ -352,6 +410,7 @@ const skins = [
     {
         name:"🦸 Herói",
         unlock:100,
+        cost:0,
         body:"#2878ff",
         wing:"#1652b5"
     },
@@ -359,6 +418,7 @@ const skins = [
     {
         name:"🔥 Fênix",
         unlock:300,
+        cost:0,
         body:"#ff4b16",
         wing:"#c83200"
     },
@@ -366,6 +426,7 @@ const skins = [
     {
         name:"🤖 Robô",
         unlock:500,
+        cost:0,
         body:"#9da5ad",
         wing:"#626970"
     },
@@ -373,6 +434,7 @@ const skins = [
     {
         name:"👽 Alien",
         unlock:1000,
+        cost:0,
         body:"#65ff50",
         wing:"#269e28"
     },
@@ -380,6 +442,7 @@ const skins = [
     {
         name:"🌑 Sombrio",
         unlock:2000,
+        cost:0,
         body:"#292333",
         wing:"#15111c"
     },
@@ -387,44 +450,49 @@ const skins = [
     {
         name:"🍩 Rosquinha",
         unlock:2500,
+        cost:0,
         body:"#ff9b45",
-        wing:"#d86c25"
+        wing:"#d76b22"
     },
 
     {
         name:"🧇 Waffle",
         unlock:3000,
-        body:"#d99a3e",
-        wing:"#a96820"
+        cost:0,
+        body:"#e5a33a",
+        wing:"#b96e20"
     },
 
     {
         name:"🎅 Natal",
         unlock:0,
-        body:"#e52b2b",
+        cost:50,
+        body:"#e52323",
         wing:"#ffffff"
     },
 
     {
         name:"🎃 Halloween",
         unlock:0,
-        body:"#ff7518",
-        wing:"#4d245f"
+        cost:50,
+        body:"#ff7417",
+        wing:"#6b2bb5"
     },
 
     {
         name:"🥳 Ano Novo",
         unlock:0,
-        body:"#f2c230",
-        wing:"#8b5cf6"
+        cost:50,
+        body:"#ffd21f",
+        wing:"#ff55c8"
     }
 
 ];
 
 
-/* =====================================================
+/* ==================================================
    DADOS SALVOS
-===================================================== */
+================================================== */
 
 let bestScore =
     Number(
@@ -446,23 +514,15 @@ let selectedMap =
 
 
 if(
-    !skins[selectedSkin] ||
-    bestScore < skins[selectedSkin].unlock
+    !skins[selectedSkin]
 ){
     selectedSkin = 0;
 }
 
-if(
-    selectedMap !== "normal" &&
-    selectedMap !== "desert"
-){
-    selectedMap = "normal";
-}
 
-
-/* =====================================================
+/* ==================================================
    SALVAR
-===================================================== */
+================================================== */
 
 function save(){
 
@@ -489,9 +549,9 @@ function save(){
 }
 
 
-/* =====================================================
+/* ==================================================
    MENU DAS SKINS
-===================================================== */
+================================================== */
 
 function createSkins(){
 
@@ -500,16 +560,38 @@ function createSkins(){
 
     box.innerHTML = "";
 
+
     skins.forEach(
         (skin,index)=>{
 
             const button =
                 document.createElement("button");
 
-            const unlocked =
-                bestScore >= skin.unlock;
-
             button.className = "skin";
+
+
+            let unlocked = false;
+
+
+            /* Skins normais */
+
+            if(skin.cost === 0){
+
+                unlocked =
+                    bestScore >= skin.unlock;
+
+            }
+
+
+            /* Skins de evento */
+
+            if(skin.cost > 0){
+
+                unlocked =
+                    totalCoins >= skin.cost;
+
+            }
+
 
             if(index === selectedSkin){
 
@@ -519,6 +601,7 @@ function createSkins(){
 
             }
 
+
             if(!unlocked){
 
                 button.classList.add(
@@ -527,20 +610,19 @@ function createSkins(){
 
             }
 
+
             if(unlocked){
 
                 button.textContent =
                     skin.name +
-                    (
-                        skin.unlock > 0
-                        ? " ✓"
-                        : ""
-                    );
+                    " ✓";
+
 
                 button.onclick =
                     function(){
 
-                        selectedSkin = index;
+                        selectedSkin =
+                            index;
 
                         save();
 
@@ -550,36 +632,51 @@ function createSkins(){
 
             }else{
 
-                button.textContent =
-                    skin.name +
-                    " 🔒 " +
-                    skin.unlock;
+                if(skin.cost > 0){
+
+                    button.textContent =
+                        skin.name +
+                        " 🔒 " +
+                        skin.cost +
+                        " 🪙";
+
+                }else{
+
+                    button.textContent =
+                        skin.name +
+                        " 🔒 " +
+                        skin.unlock;
+
+                }
 
             }
 
-            box.appendChild(button);
+
+            box.appendChild(
+                button
+            );
 
         }
     );
 
+
     document.getElementById(
         "best"
-    ).textContent = bestScore;
+    ).textContent =
+        bestScore;
+
 
     document.getElementById(
         "totalCoins"
-    ).textContent = totalCoins;
-
-    updateMapButton();
+    ).textContent =
+        totalCoins;
 
 }
 
-createSkins();
 
-
-/* =====================================================
+/* ==================================================
    MAPA
-===================================================== */
+================================================== */
 
 function updateMapButton(){
 
@@ -588,31 +685,37 @@ function updateMapButton(){
             "mapButton"
         );
 
+
     if(bestScore < 2000){
 
+        selectedMap = "normal";
+
         button.textContent =
-            "🌤️ NORMAL";
+            "🌤️ MAPA NORMAL 🔒 🌵 2000";
 
         button.classList.add(
             "locked"
         );
 
         return;
+
     }
+
 
     button.classList.remove(
         "locked"
     );
 
-    if(selectedMap === "normal"){
+
+    if(selectedMap === "desert"){
 
         button.textContent =
-            "🌤️ NORMAL";
+            "🌵 DESERTO ✓";
 
     }else{
 
         button.textContent =
-            "🏜️ DESERTO";
+            "🌤️ MAPA NORMAL ✓";
 
     }
 
@@ -626,13 +729,14 @@ function(){
 
     if(bestScore < 2000){
 
-        alert(
-            "🏜️ DESERTO BLOQUEADO!\n\n" +
-            "Faça 2000 pontos de recorde para desbloquear."
-        );
+        selectedMap = "normal";
+
+        updateMapButton();
 
         return;
+
     }
+
 
     if(selectedMap === "normal"){
 
@@ -644,6 +748,7 @@ function(){
 
     }
 
+
     save();
 
     updateMapButton();
@@ -651,9 +756,14 @@ function(){
 };
 
 
-/* =====================================================
+createSkins();
+
+updateMapButton();
+
+
+/* ==================================================
    JOGO
-===================================================== */
+================================================== */
 
 let bird;
 
@@ -675,9 +785,9 @@ let fatalTimer = 0;
 let coinTimer = 0;
 
 
-/* =====================================================
+/* ==================================================
    RESET
-===================================================== */
+================================================== */
 
 function resetGame(){
 
@@ -699,59 +809,132 @@ function resetGame(){
 
     };
 
+
     normalClouds = [];
     fatalClouds = [];
     coins = [];
     particles = [];
 
+
     score = 0;
+
     runCoins = 0;
 
     gameTime = 0;
+
 
     cloudTimer = .2;
     fatalTimer = 2.5;
     coinTimer = .8;
 
+
     document.getElementById(
         "score"
-    ).textContent = "0";
+    ).textContent =
+        "0";
+
 
     document.getElementById(
         "coins"
-    ).textContent = "0";
+    ).textContent =
+        "0";
 
 }
 
 
-/* =====================================================
-   COMEÇAR
-===================================================== */
+/* ==================================================
+   TELA CHEIA
+================================================== */
 
-function startGame(){
+async function enterFullscreen(){
+
+    try{
+
+        if(
+            !document.fullscreenElement &&
+            document.documentElement.requestFullscreen
+        ){
+
+            await document.documentElement.requestFullscreen();
+
+        }
+
+    }catch(e){
+
+        console.log(
+            "Fullscreen não disponível",
+            e
+        );
+
+    }
+
+
+    try{
+
+        if(
+            screen.orientation &&
+            screen.orientation.lock
+        ){
+
+            await screen.orientation.lock(
+                "landscape"
+            );
+
+        }
+
+    }catch(e){
+
+        console.log(
+            "Orientação automática não disponível"
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   COMEÇAR
+================================================== */
+
+async function startGame(){
+
+    await enterFullscreen();
+
 
     resetGame();
 
+
     document.getElementById(
         "menu"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 
     document.getElementById(
         "gameOver"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 
     document.getElementById(
         "score"
-    ).style.display = "block";
+    ).style.display =
+        "block";
+
 
     document.getElementById(
         "coinHud"
-    ).style.display = "block";
+    ).style.display =
+        "block";
+
 
     playing = true;
 
+
     lastTime =
         performance.now();
+
 
     requestAnimationFrame(
         gameLoop
@@ -760,24 +943,26 @@ function startGame(){
 }
 
 
-/* =====================================================
+/* ==================================================
    PULO
-===================================================== */
+================================================== */
 
 function flap(){
 
     if(!playing) return;
 
-    bird.velocity = -390;
+    bird.velocity =
+        -390;
 
-    bird.rotation = -.5;
+    bird.rotation =
+        -0.5;
 
 }
 
 
-/* =====================================================
+/* ==================================================
    CONTROLES
-===================================================== */
+================================================== */
 
 canvas.addEventListener(
     "pointerdown",
@@ -789,6 +974,7 @@ canvas.addEventListener(
 
     }
 );
+
 
 document.addEventListener(
     "keydown",
@@ -808,13 +994,22 @@ document.addEventListener(
     }
 );
 
+
 document.getElementById(
     "start"
-).onclick = startGame;
+).onclick =
+startGame;
+
 
 document.getElementById(
     "restart"
-).onclick = startGame;
+).onclick =
+startGame;
+
+
+/* ==================================================
+   MENU
+================================================== */
 
 document.getElementById(
     "backMenu"
@@ -823,23 +1018,34 @@ function(){
 
     playing = false;
 
+
     document.getElementById(
         "gameOver"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 
     document.getElementById(
         "menu"
-    ).style.display = "flex";
+    ).style.display =
+        "flex";
+
 
     document.getElementById(
         "score"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 
     document.getElementById(
         "coinHud"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 
     createSkins();
+
+    updateMapButton();
 
     resetGame();
 
@@ -848,9 +1054,9 @@ function(){
 };
 
 
-/* =====================================================
+/* ==================================================
    NUVEM NORMAL
-===================================================== */
+================================================== */
 
 function createNormalCloud(){
 
@@ -859,43 +1065,37 @@ function createNormalCloud(){
         x:W + 120,
 
         y:
-            60 +
+            70 +
             Math.random() *
-            Math.max(
-                100,
-                H * .60
-            ),
+            (H * .60),
 
         size:
             25 +
             Math.random() * 20,
 
         speed:
-            50 +
-            Math.random() * 30
+            45 +
+            Math.random() * 25
 
     });
 
 }
 
 
-/* =====================================================
+/* ==================================================
    NUVEM FATAL
-===================================================== */
+================================================== */
 
 function createFatalCloud(){
 
     fatalClouds.push({
 
-        x:W + 150,
+        x:W + 140,
 
         y:
             70 +
             Math.random() *
-            Math.max(
-                100,
-                H * .55
-            ),
+            (H * .60),
 
         size:
             38 +
@@ -912,23 +1112,20 @@ function createFatalCloud(){
 }
 
 
-/* =====================================================
+/* ==================================================
    MOEDA
-===================================================== */
+================================================== */
 
 function createCoin(){
 
     coins.push({
 
-        x:W + 60,
+        x:W + 50,
 
         y:
             70 +
             Math.random() *
-            Math.max(
-                100,
-                H * .60
-            ),
+            (H * .62),
 
         radius:15,
 
@@ -941,9 +1138,9 @@ function createCoin(){
 }
 
 
-/* =====================================================
+/* ==================================================
    PARTÍCULAS
-===================================================== */
+================================================== */
 
 function particlesAt(
     x,
@@ -965,11 +1162,11 @@ function particlesAt(
 
             vx:
                 (Math.random()-.5)
-                * 160,
+                *160,
 
             vy:
                 (Math.random()-.5)
-                * 160,
+                *160,
 
             life:.5,
 
@@ -982,9 +1179,9 @@ function particlesAt(
 }
 
 
-/* =====================================================
+/* ==================================================
    ATUALIZAR
-===================================================== */
+================================================== */
 
 function update(delta){
 
@@ -993,6 +1190,7 @@ function update(delta){
             delta,
             .035
         );
+
 
     gameTime += delta;
 
@@ -1008,14 +1206,12 @@ function update(delta){
     bird.rotation +=
         2 * delta;
 
-    bird.rotation =
-        Math.max(
-            -.5,
-            Math.min(
-                1,
-                bird.rotation
-            )
-        );
+
+    if(bird.rotation > 1){
+
+        bird.rotation = 1;
+
+    }
 
 
     /* TIMERS */
@@ -1058,8 +1254,6 @@ function update(delta){
     }
 
 
-    /* VELOCIDADE */
-
     const speed =
         1 +
         Math.min(
@@ -1071,7 +1265,8 @@ function update(delta){
     /* NUVENS */
 
     for(
-        const cloud of normalClouds
+        const cloud
+        of normalClouds
     ){
 
         cloud.x -=
@@ -1085,7 +1280,8 @@ function update(delta){
     /* NUVENS FATAIS */
 
     for(
-        const cloud of fatalClouds
+        const cloud
+        of fatalClouds
     ){
 
         cloud.x -=
@@ -1102,7 +1298,8 @@ function update(delta){
     /* MOEDAS */
 
     for(
-        const coin of coins
+        const coin
+        of coins
     ){
 
         coin.x -=
@@ -1124,13 +1321,16 @@ function update(delta){
         i--
     ){
 
-        const coin = coins[i];
+        const coin =
+            coins[i];
+
 
         const distance =
             Math.hypot(
                 bird.x - coin.x,
                 bird.y - coin.y
             );
+
 
         if(
             distance <
@@ -1140,10 +1340,12 @@ function update(delta){
 
             runCoins++;
 
+
             document.getElementById(
                 "coins"
             ).textContent =
                 runCoins;
+
 
             particlesAt(
                 coin.x,
@@ -1151,6 +1353,7 @@ function update(delta){
                 10,
                 "#ffe600"
             );
+
 
             coins.splice(
                 i,
@@ -1175,7 +1378,8 @@ function update(delta){
     /* COLISÃO NUVEM FATAL */
 
     for(
-        const cloud of fatalClouds
+        const cloud
+        of fatalClouds
     ){
 
         const distance =
@@ -1183,6 +1387,7 @@ function update(delta){
                 bird.x - cloud.x,
                 bird.y - cloud.y
             );
+
 
         if(
             distance <
@@ -1197,6 +1402,7 @@ function update(delta){
                 "#ff3333"
             );
 
+
             endGame();
 
             return;
@@ -1206,18 +1412,17 @@ function update(delta){
     }
 
 
-    /* LIMPEZA */
-
     normalClouds =
         normalClouds.filter(
             cloud =>
-                cloud.x > -180
+                cloud.x > -150
         );
+
 
     fatalClouds =
         fatalClouds.filter(
             cloud =>
-                cloud.x > -180
+                cloud.x > -150
         );
 
 
@@ -1232,13 +1437,16 @@ function update(delta){
         const p =
             particles[i];
 
+
         p.x +=
             p.vx * delta;
 
         p.y +=
             p.vy * delta;
 
-        p.life -= delta;
+        p.life -=
+            delta;
+
 
         if(p.life <= 0){
 
@@ -1286,54 +1494,20 @@ function update(delta){
             gameTime * 5
         );
 
+
     document.getElementById(
         "score"
     ).textContent =
         score;
 
-
-    /* ATUALIZA DESBLOQUEIOS */
-
-    if(score > bestScore){
-
-        bestScore = score;
-
-        document.getElementById(
-            "best"
-        ).textContent =
-            bestScore;
-
-        updateMapButton();
-
-    }
-
 }
 
 
-/* =====================================================
+/* ==================================================
    FUNDO
-===================================================== */
+================================================== */
 
 function drawBackground(){
-
-    if(selectedMap === "desert"){
-
-        drawDesert();
-
-    }else{
-
-        drawNormalMap();
-
-    }
-
-}
-
-
-/* =====================================================
-   MAPA NORMAL
-===================================================== */
-
-function drawNormalMap(){
 
     const gradient =
         ctx.createLinearGradient(
@@ -1343,18 +1517,37 @@ function drawNormalMap(){
             H
         );
 
-    gradient.addColorStop(
-        0,
-        "#58c8e8"
-    );
 
-    gradient.addColorStop(
-        1,
-        "#b9f2ff"
-    );
+    if(selectedMap === "desert"){
+
+        gradient.addColorStop(
+            0,
+            "#f5a33b"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#ffe09a"
+        );
+
+    }else{
+
+        gradient.addColorStop(
+            0,
+            "#58c8e8"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#b9f2ff"
+        );
+
+    }
+
 
     ctx.fillStyle =
         gradient;
+
 
     ctx.fillRect(
         0,
@@ -1367,7 +1560,10 @@ function drawNormalMap(){
     /* SOL */
 
     ctx.fillStyle =
-        "#ffe36b";
+        selectedMap === "desert"
+        ? "#fff1a0"
+        : "#ffe36b";
+
 
     ctx.beginPath();
 
@@ -1382,123 +1578,58 @@ function drawNormalMap(){
     ctx.fill();
 
 
-    /* CHÃO */
+    /* DESERTO */
 
-    ctx.fillStyle =
-        "#79c94a";
-
-    ctx.fillRect(
-        0,
-        H - 45,
-        W,
-        45
-    );
-
-}
-
-
-/* =====================================================
-   MAPA DESERTO
-===================================================== */
-
-function drawDesert(){
-
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            H
-        );
-
-    gradient.addColorStop(
-        0,
-        "#4fc2df"
-    );
-
-    gradient.addColorStop(
-        1,
-        "#ffd078"
-    );
-
-    ctx.fillStyle =
-        gradient;
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-    /* SOL */
-
-    ctx.fillStyle =
-        "#ffe04b";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        W * .82,
-        H * .16,
-        45,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    /* AREIA */
-
-    ctx.fillStyle =
-        "#e5b65a";
-
-    ctx.fillRect(
-        0,
-        H - 45,
-        W,
-        45
-    );
-
-
-    /* CACTOS */
-
-    for(
-        let i=0;
-        i<7;
-        i++
-    ){
-
-        const x =
-            (i * 190 + 80) % W;
-
-        const base =
-            H - 45;
+    if(selectedMap === "desert"){
 
         ctx.fillStyle =
-            "#398c3b";
+            "#d99a3d";
 
         ctx.fillRect(
-            x,
-            base - 42,
-            11,
-            42
+            0,
+            H - 45,
+            W,
+            45
         );
 
-        ctx.fillRect(
-            x - 12,
-            base - 30,
-            12,
-            8
-        );
+
+        /* pequenas dunas */
+
+        ctx.fillStyle =
+            "#c6842e";
+
+        for(
+            let x=0;
+            x<W;
+            x+=100
+        ){
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                H-35,
+                45,
+                Math.PI,
+                0
+            );
+
+            ctx.fill();
+
+        }
+
+    }else{
+
+        /* CHÃO NORMAL */
+
+        ctx.fillStyle =
+            "#79c94a";
 
         ctx.fillRect(
-            x + 11,
-            base - 21,
-            12,
-            8
+            0,
+            H - 45,
+            W,
+            45
         );
 
     }
@@ -1506,9 +1637,9 @@ function drawDesert(){
 }
 
 
-/* =====================================================
+/* ==================================================
    NUVEM NORMAL
-===================================================== */
+================================================== */
 
 function drawNormalCloud(
     cloud
@@ -1521,41 +1652,43 @@ function drawNormalCloud(
         cloud.y
     );
 
+
     ctx.fillStyle =
         "rgba(255,255,255,.9)";
+
 
     ctx.beginPath();
 
     ctx.arc(
         -40,
         8,
-        cloud.size * .65,
+        cloud.size*.65,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         -10,
         -10,
-        cloud.size * .9,
+        cloud.size*.9,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         25,
         4,
-        cloud.size * .75,
+        cloud.size*.75,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         48,
         12,
-        cloud.size * .5,
+        cloud.size*.5,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1565,9 +1698,9 @@ function drawNormalCloud(
 }
 
 
-/* =====================================================
+/* ==================================================
    NUVEM FATAL
-===================================================== */
+================================================== */
 
 function drawFatalCloud(
     cloud
@@ -1575,18 +1708,22 @@ function drawFatalCloud(
 
     ctx.save();
 
+
     ctx.translate(
         cloud.x,
         cloud.y +
         Math.sin(
             cloud.pulse
-        ) * 3
+        )*3
     );
+
 
     ctx.shadowColor =
         "#ff3030";
 
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur =
+        15;
+
 
     ctx.fillStyle =
         "#5a5a66";
@@ -1596,42 +1733,45 @@ function drawFatalCloud(
 
     ctx.lineWidth = 5;
 
+
     ctx.beginPath();
 
     ctx.arc(
         -40,
         8,
-        cloud.size * .65,
+        cloud.size*.65,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         -10,
         -10,
-        cloud.size * .9,
+        cloud.size*.9,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         25,
         4,
-        cloud.size * .75,
+        cloud.size*.75,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         48,
         12,
-        cloud.size * .5,
+        cloud.size*.5,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
+
     ctx.stroke();
+
 
     ctx.shadowBlur = 0;
 
@@ -1641,6 +1781,7 @@ function drawFatalCloud(
     ctx.fillStyle =
         "#ff3333";
 
+
     ctx.beginPath();
 
     ctx.arc(
@@ -1648,7 +1789,7 @@ function drawFatalCloud(
         2,
         6,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
@@ -1656,7 +1797,7 @@ function drawFatalCloud(
         2,
         6,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1668,6 +1809,7 @@ function drawFatalCloud(
         "#ff3333";
 
     ctx.lineWidth = 4;
+
 
     ctx.beginPath();
 
@@ -1685,14 +1827,15 @@ function drawFatalCloud(
 
     ctx.stroke();
 
+
     ctx.restore();
 
 }
 
 
-/* =====================================================
+/* ==================================================
    MOEDA
-===================================================== */
+================================================== */
 
 function drawCoin(
     coin
@@ -1700,10 +1843,12 @@ function drawCoin(
 
     ctx.save();
 
+
     ctx.translate(
         coin.x,
         coin.y
     );
+
 
     const scale =
         Math.abs(
@@ -1711,6 +1856,7 @@ function drawCoin(
                 coin.spin
             )
         );
+
 
     ctx.scale(
         Math.max(
@@ -1720,6 +1866,7 @@ function drawCoin(
         1
     );
 
+
     ctx.fillStyle =
         "#ffd21f";
 
@@ -1728,6 +1875,7 @@ function drawCoin(
 
     ctx.lineWidth = 3;
 
+
     ctx.beginPath();
 
     ctx.arc(
@@ -1735,11 +1883,13 @@ function drawCoin(
         0,
         coin.radius,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
+
     ctx.stroke();
+
 
     ctx.fillStyle =
         "#fff3a0";
@@ -1753,20 +1903,22 @@ function drawCoin(
     ctx.textBaseline =
         "middle";
 
+
     ctx.fillText(
         "$",
         0,
         1
     );
 
+
     ctx.restore();
 
 }
 
 
-/* =====================================================
+/* ==================================================
    PÁSSARO
-===================================================== */
+================================================== */
 
 function drawBird(){
 
@@ -1776,108 +1928,19 @@ function drawBird(){
     const r =
         bird.radius;
 
+
     ctx.save();
+
 
     ctx.translate(
         bird.x,
         bird.y
     );
 
+
     ctx.rotate(
         bird.rotation
     );
-
-
-    /* ROSQUINHA */
-
-    if(selectedSkin === 6){
-
-        ctx.fillStyle =
-            "#d88945";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            0,
-            -r * 1.05,
-            r * .48,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        ctx.fillStyle =
-            "#70c5ce";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            0,
-            -r * 1.05,
-            r * .18,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-    }
-
-
-    /* WAFFLE */
-
-    if(selectedSkin === 7){
-
-        ctx.save();
-
-        ctx.translate(
-            0,
-            -r * .95
-        );
-
-        ctx.rotate(-.05);
-
-        ctx.fillStyle =
-            "#d99a3e";
-
-        ctx.fillRect(
-            -r * .65,
-            -r * .35,
-            r * 1.3,
-            r * .7
-        );
-
-        ctx.strokeStyle =
-            "#8e581c";
-
-        ctx.lineWidth = 2;
-
-        for(
-            let i=-2;
-            i<=2;
-            i++
-        ){
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                i*r*.25,
-                -r*.3
-            );
-
-            ctx.lineTo(
-                i*r*.25,
-                r*.3
-            );
-
-            ctx.stroke();
-
-        }
-
-        ctx.restore();
-
-    }
 
 
     /* FÊNIX */
@@ -1886,6 +1949,7 @@ function drawBird(){
 
         ctx.fillStyle =
             "#ff7a00";
+
 
         ctx.beginPath();
 
@@ -1937,6 +2001,7 @@ function drawBird(){
     ctx.fillStyle =
         skin.body;
 
+
     ctx.beginPath();
 
     ctx.arc(
@@ -1944,10 +2009,11 @@ function drawBird(){
         0,
         r,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
+
 
     ctx.shadowBlur = 0;
 
@@ -1956,6 +2022,7 @@ function drawBird(){
 
     ctx.fillStyle =
         skin.wing;
+
 
     ctx.beginPath();
 
@@ -1972,6 +2039,36 @@ function drawBird(){
     ctx.fill();
 
 
+    /* CAPA */
+
+    if(selectedSkin === 1){
+
+        ctx.fillStyle =
+            "#e21b23";
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -r*.2,
+            r*.2
+        );
+
+        ctx.lineTo(
+            -r*1.7,
+            r*1.2
+        );
+
+        ctx.lineTo(
+            -r,
+            0
+        );
+
+        ctx.fill();
+
+    }
+
+
     /* ROBÔ */
 
     if(selectedSkin === 3){
@@ -1981,6 +2078,7 @@ function drawBird(){
 
         ctx.lineWidth = 3;
 
+
         ctx.strokeRect(
             -r*.65,
             -r*.65,
@@ -1988,8 +2086,10 @@ function drawBird(){
             r*1.3
         );
 
+
         ctx.fillStyle =
             "#ff3333";
+
 
         ctx.beginPath();
 
@@ -2013,6 +2113,7 @@ function drawBird(){
         ctx.fillStyle =
             "#111";
 
+
         ctx.beginPath();
 
         ctx.ellipse(
@@ -2030,41 +2131,181 @@ function drawBird(){
     }
 
 
-    /* NATAL */
+    /* ROSQUINHA */
 
-    if(selectedSkin === 8){
+    if(selectedSkin === 6){
 
         ctx.fillStyle =
-            "white";
+            "#d87932";
+
 
         ctx.beginPath();
 
         ctx.arc(
             0,
-            -r*.95,
-            r*.45,
+            -r*1.05,
+            r*.65,
             0,
             Math.PI*2
         );
 
         ctx.fill();
 
-        ctx.fillStyle =
-            "#e52b2b";
 
-        ctx.fillRect(
-            -r*.45,
-            -r*1.25,
-            r*.9,
-            r*.18
-        );
+        ctx.fillStyle =
+            "#f7b45b";
+
 
         ctx.beginPath();
 
         ctx.arc(
             0,
-            -r*1.4,
-            r*.2,
+            -r*1.05,
+            r*.38,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* granulado */
+
+        ctx.fillStyle =
+            "#ff4b75";
+
+        ctx.fillRect(
+            -r*.35,
+            -r*1.35,
+            5,
+            3
+        );
+
+        ctx.fillStyle =
+            "#4bd6ff";
+
+        ctx.fillRect(
+            r*.1,
+            -r*1.45,
+            5,
+            3
+        );
+
+    }
+
+
+    /* WAFFLE */
+
+    if(selectedSkin === 7){
+
+        ctx.fillStyle =
+            "#d28b2c";
+
+
+        ctx.fillRect(
+            -r*.7,
+            -r*1.55,
+            r*1.4,
+            r*.65
+        );
+
+
+        ctx.strokeStyle =
+            "#8a551c";
+
+        ctx.lineWidth = 3;
+
+
+        for(
+            let i=-2;
+            i<=2;
+            i++
+        ){
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                -r*.65 + i*r*.32,
+                -r*1.52
+            );
+
+            ctx.lineTo(
+                -r*.35 + i*r*.32,
+                -r*.95
+            );
+
+            ctx.stroke();
+
+        }
+
+
+        for(
+            let i=0;
+            i<3;
+            i++
+        ){
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                -r*.65,
+                -r*1.4+i*r*.2
+            );
+
+            ctx.lineTo(
+                r*.65,
+                -r*1.4+i*r*.2
+            );
+
+            ctx.stroke();
+
+        }
+
+    }
+
+
+    /* NATAL */
+
+    if(selectedSkin === 8){
+
+        /* gorro */
+
+        ctx.fillStyle =
+            "#e52323";
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -r*.7,
+            -r*.7
+        );
+
+        ctx.lineTo(
+            r*.55,
+            -r*1.55
+        );
+
+        ctx.lineTo(
+            r*.8,
+            -r*.55
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "white";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            r*.57,
+            -r*1.55,
+            r*.16,
             0,
             Math.PI*2
         );
@@ -2078,28 +2319,40 @@ function drawBird(){
 
     if(selectedSkin === 9){
 
+        /* chapéu de bruxa */
+
         ctx.fillStyle =
-            "#111";
+            "#4c1b80";
+
 
         ctx.beginPath();
 
-        ctx.arc(
-            -r*.3,
-            -r*.2,
-            r*.13,
-            0,
-            Math.PI*2
+        ctx.moveTo(
+            -r*.8,
+            -r*.65
         );
 
-        ctx.arc(
-            r*.3,
-            -r*.2,
-            r*.13,
+        ctx.lineTo(
             0,
-            Math.PI*2
+            -r*1.65
         );
+
+        ctx.lineTo(
+            r*.8,
+            -r*.65
+        );
+
+        ctx.closePath();
 
         ctx.fill();
+
+
+        ctx.fillRect(
+            -r*.9,
+            -r*.72,
+            r*1.8,
+            r*.18
+        );
 
     }
 
@@ -2108,33 +2361,28 @@ function drawBird(){
 
     if(selectedSkin === 10){
 
-        ctx.strokeStyle =
-            "#ffe600";
+        ctx.fillStyle =
+            "#ff55c8";
 
-        ctx.lineWidth = 3;
 
         for(
             let i=0;
-            i<8;
+            i<5;
             i++
         ){
 
-            const a =
-                i * Math.PI / 4;
-
             ctx.beginPath();
 
-            ctx.moveTo(
-                Math.cos(a)*r*1.1,
-                Math.sin(a)*r*1.1
+            ctx.arc(
+                (i-2)*r*.45,
+                -r*1.15 -
+                (i%2)*r*.2,
+                r*.08,
+                0,
+                Math.PI*2
             );
 
-            ctx.lineTo(
-                Math.cos(a)*r*1.5,
-                Math.sin(a)*r*1.5
-            );
-
-            ctx.stroke();
+            ctx.fill();
 
         }
 
@@ -2145,6 +2393,7 @@ function drawBird(){
 
     ctx.fillStyle =
         "white";
+
 
     ctx.beginPath();
 
@@ -2158,8 +2407,10 @@ function drawBird(){
 
     ctx.fill();
 
+
     ctx.fillStyle =
         "#111";
+
 
     ctx.beginPath();
 
@@ -2178,6 +2429,7 @@ function drawBird(){
 
     ctx.fillStyle =
         "#ff8c00";
+
 
     ctx.beginPath();
 
@@ -2200,14 +2452,15 @@ function drawBird(){
 
     ctx.fill();
 
+
     ctx.restore();
 
 }
 
 
-/* =====================================================
+/* ==================================================
    DESENHAR
-===================================================== */
+================================================== */
 
 function draw(){
 
@@ -2215,7 +2468,8 @@ function draw(){
 
 
     for(
-        const cloud of normalClouds
+        const cloud
+        of normalClouds
     ){
 
         drawNormalCloud(
@@ -2226,7 +2480,8 @@ function draw(){
 
 
     for(
-        const cloud of fatalClouds
+        const cloud
+        of fatalClouds
     ){
 
         drawFatalCloud(
@@ -2237,7 +2492,8 @@ function draw(){
 
 
     for(
-        const coin of coins
+        const coin
+        of coins
     ){
 
         drawCoin(
@@ -2248,13 +2504,14 @@ function draw(){
 
 
     for(
-        const p of particles
+        const p
+        of particles
     ){
 
         ctx.globalAlpha =
             Math.max(
                 0,
-                p.life * 2
+                p.life*2
             );
 
         ctx.fillStyle =
@@ -2269,6 +2526,7 @@ function draw(){
 
     }
 
+
     ctx.globalAlpha = 1;
 
     drawBird();
@@ -2276,22 +2534,26 @@ function draw(){
 }
 
 
-/* =====================================================
+/* ==================================================
    LOOP
-===================================================== */
+================================================== */
 
 function gameLoop(now){
 
     if(!playing) return;
 
+
     const delta =
         (now-lastTime)/1000;
 
+
     lastTime = now;
+
 
     update(delta);
 
     draw();
+
 
     if(playing){
 
@@ -2304,13 +2566,14 @@ function gameLoop(now){
 }
 
 
-/* =====================================================
+/* ==================================================
    GAME OVER
-===================================================== */
+================================================== */
 
 function endGame(){
 
     if(!playing) return;
+
 
     playing = false;
 
@@ -2334,10 +2597,12 @@ function endGame(){
     ).textContent =
         score;
 
+
     document.getElementById(
         "finalBest"
     ).textContent =
         bestScore;
+
 
     document.getElementById(
         "finalCoins"
@@ -2350,10 +2615,12 @@ function endGame(){
     ).style.display =
         "none";
 
+
     document.getElementById(
         "coinHud"
     ).style.display =
         "none";
+
 
     document.getElementById(
         "gameOver"
@@ -2368,17 +2635,13 @@ function endGame(){
 }
 
 
-/* =====================================================
+/* ==================================================
    INICIAL
-===================================================== */
+================================================== */
 
 resetGame();
 
 draw();
 
-updateMapButton();
-
-</script>
-
-</body>
- </html>
+</script></body>
+      </html>
