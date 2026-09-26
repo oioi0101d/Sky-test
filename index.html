@@ -9,129 +9,129 @@
 *{box-sizing:border-box;margin:0;padding:0;touch-action:none}
 
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#70c5ce;
-    font-family:Arial,sans-serif
+width:100%;
+height:100%;
+overflow:hidden;
+background:#70c5ce;
+font-family:Arial,sans-serif
 }
 
 #game{
-    position:fixed;
-    inset:0;
-    width:100vw;
-    height:100vh;
-    display:block
+position:fixed;
+inset:0;
+width:100vw;
+height:100vh;
+display:block
 }
 
 #menu{
-    position:fixed;
-    inset:0;
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(#58c8e8,#b9f2ff)
+position:fixed;
+inset:0;
+z-index:10;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(#58c8e8,#b9f2ff)
 }
 
 #menu h1{
-    color:white;
-    font-size:clamp(45px,9vw,80px);
-    text-shadow:4px 4px #333
+color:white;
+font-size:clamp(45px,9vw,80px);
+text-shadow:4px 4px #333
 }
 
 #menu p{
-    color:#333;
-    font-weight:bold;
-    margin:6px
+color:#333;
+font-weight:bold;
+margin:6px
 }
 
 #skins{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px;
-    max-width:850px;
-    padding:10px
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:8px;
+max-width:850px;
+padding:10px
 }
 
 .skin{
-    min-width:120px;
-    padding:10px;
-    border:3px solid white;
-    border-radius:12px;
-    background:#222;
-    color:white;
-    font-size:16px;
-    font-weight:bold
+min-width:120px;
+padding:10px;
+border:3px solid white;
+border-radius:12px;
+background:#222;
+color:white;
+font-size:16px;
+font-weight:bold
 }
 
 .skin.selected{
-    border-color:#ffe600;
-    box-shadow:0 0 15px #ffe600
+border-color:#ffe600;
+box-shadow:0 0 15px #ffe600
 }
 
 .skin.locked{
-    opacity:.4
+opacity:.4
 }
 
 .button{
-    margin-top:12px;
-    padding:14px 42px;
-    border:0;
-    border-radius:15px;
-    background:#35b84a;
-    color:white;
-    font-size:24px;
-    font-weight:bold
+margin-top:12px;
+padding:14px 42px;
+border:0;
+border-radius:15px;
+background:#35b84a;
+color:white;
+font-size:24px;
+font-weight:bold
 }
 
 #score{
-    position:fixed;
-    z-index:5;
-    top:12px;
-    left:50%;
-    transform:translateX(-50%);
-    display:none;
-    color:white;
-    font-size:clamp(30px,5vw,55px);
-    font-weight:bold;
-    text-shadow:4px 4px #333
+position:fixed;
+z-index:5;
+top:12px;
+left:50%;
+transform:translateX(-50%);
+display:none;
+color:white;
+font-size:clamp(30px,5vw,55px);
+font-weight:bold;
+text-shadow:4px 4px #333
 }
 
 #coinHud{
-    position:fixed;
-    z-index:5;
-    top:18px;
-    left:20px;
-    display:none;
-    color:white;
-    font-size:22px;
-    font-weight:bold;
-    text-shadow:3px 3px #333
+position:fixed;
+z-index:5;
+top:18px;
+left:20px;
+display:none;
+color:white;
+font-size:22px;
+font-weight:bold;
+text-shadow:3px 3px #333
 }
 
 #gameOver{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    display:none;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:rgba(0,0,0,.6);
-    color:white
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.6);
+color:white
 }
 
 #gameOver h2{
-    font-size:clamp(45px,8vw,70px);
-    text-shadow:4px 4px #000
+font-size:clamp(45px,8vw,70px);
+text-shadow:4px 4px #000
 }
 
 #gameOver p{
-    font-size:22px;
-    margin:6px
+font-size:22px;
+margin:6px
 }
 </style>
 </head>
@@ -162,9 +162,7 @@ html,body{
 
 <div id="skins"></div>
 
-<button class="button" id="start">
-JOGAR
-</button>
+<button class="button" id="start">JOGAR</button>
 
 </div>
 
@@ -199,10 +197,6 @@ MENU
 
 <script>
 
-/* =========================
-   CANVAS
-========================= */
-
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
@@ -210,8 +204,8 @@ let W=0;
 let H=0;
 
 function resize(){
-    W=canvas.width=window.innerWidth;
-    H=canvas.height=window.innerHeight;
+W=canvas.width=window.innerWidth;
+H=canvas.height=window.innerHeight;
 }
 
 resize();
@@ -225,45 +219,45 @@ window.addEventListener("resize",resize);
 const skins=[
 
 {
-    name:"🐦 Comum",
-    unlock:0,
-    body:"#ffd21f",
-    wing:"#e5aa00"
+name:"🐦 Comum",
+unlock:0,
+body:"#ffd21f",
+wing:"#e5aa00"
 },
 
 {
-    name:"🦸 Herói",
-    unlock:100,
-    body:"#2878ff",
-    wing:"#1652b5"
+name:"🦸 Herói",
+unlock:100,
+body:"#2878ff",
+wing:"#1652b5"
 },
 
 {
-    name:"🔥 Fênix",
-    unlock:300,
-    body:"#ff4b16",
-    wing:"#c83200"
+name:"🔥 Fênix",
+unlock:300,
+body:"#ff4b16",
+wing:"#c83200"
 },
 
 {
-    name:"🤖 Robô",
-    unlock:500,
-    body:"#9da5ad",
-    wing:"#626970"
+name:"🤖 Robô",
+unlock:500,
+body:"#9da5ad",
+wing:"#626970"
 },
 
 {
-    name:"👽 Alien",
-    unlock:1000,
-    body:"#65ff50",
-    wing:"#269e28"
+name:"👽 Alien",
+unlock:1000,
+body:"#65ff50",
+wing:"#269e28"
 },
 
 {
-    name:"🌑 Sombrio",
-    unlock:2000,
-    body:"#292333",
-    wing:"#15111c"
+name:"🌑 Sombrio",
+unlock:2000,
+body:"#292333",
+wing:"#15111c"
 }
 
 ];
@@ -277,10 +271,8 @@ Number(localStorage.getItem("skyCoins")||0);
 let selectedSkin=
 Number(localStorage.getItem("skySkin")||0);
 
-if(
-!skins[selectedSkin]||
-bestScore<skins[selectedSkin].unlock
-){
+if(!skins[selectedSkin]||
+bestScore<skins[selectedSkin].unlock){
 selectedSkin=0;
 }
 
@@ -387,7 +379,6 @@ let runCoins=0;
 let playing=false;
 
 let lastTime=0;
-let gameTime=0;
 
 let cloudTimer=0;
 let coinTimer=0;
@@ -413,8 +404,6 @@ particles=[];
 
 score=0;
 runCoins=0;
-
-gameTime=0;
 
 cloudTimer=.2;
 coinTimer=.8;
@@ -474,10 +463,8 @@ flap();
 document.addEventListener("keydown",e=>{
 
 if(e.code==="Space"||e.code==="ArrowUp"){
-
 e.preventDefault();
 flap();
-
 }
 
 });
@@ -577,8 +564,6 @@ function update(delta){
 
 delta=Math.min(delta,.035);
 
-gameTime+=delta;
-
 
 /* GRAVIDADE */
 
@@ -620,18 +605,13 @@ Math.random()*.8;
 
 
 /* =========================
-   VELOCIDADE MUITO ALTA
+   VELOCIDADE 10 MILHÕES
 ========================= */
 
-const speed=
-3.5+
-Math.min(
-3,
-score/50
-);
+const speed=10000000;
 
 
-/* NUVENS NORMAIS */
+/* NUVENS */
 
 for(const cloud of normalClouds){
 
@@ -652,8 +632,7 @@ coin.x-=
 delta*
 speed;
 
-coin.spin+=
-delta*7;
+coin.spin+=delta*7;
 
 }
 
@@ -735,9 +714,24 @@ return;
 }
 
 
-/* PONTUAÇÃO */
+/* =========================
+   999.999.999 PONTOS POR SEGUNDO
+========================= */
 
-score=Math.floor(gameTime*5);
+score+=999999999*delta;
+
+score=Math.floor(score);
+
+if(score>bestScore){
+
+bestScore=score;
+
+localStorage.setItem(
+"skyBest",
+bestScore
+);
+
+}
 
 document.getElementById("score").textContent=score;
 
@@ -755,15 +749,8 @@ ctx.createLinearGradient(
 0,0,0,H
 );
 
-gradient.addColorStop(
-0,
-"#58c8e8"
-);
-
-gradient.addColorStop(
-1,
-"#b9f2ff"
-);
+gradient.addColorStop(0,"#58c8e8");
+gradient.addColorStop(1,"#b9f2ff");
 
 ctx.fillStyle=gradient;
 
@@ -872,9 +859,7 @@ coin.y
 );
 
 const scale=
-Math.abs(
-Math.cos(coin.spin)
-);
+Math.abs(Math.cos(coin.spin));
 
 ctx.scale(
 Math.max(.25,scale),
