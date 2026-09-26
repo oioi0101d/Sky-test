@@ -7,7 +7,7 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;touch-action:none}
-html,body{width:100%;height:100%;overflow:hidden;background:#05001c;font-family:Arial,sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:#70c5ce;font-family:Arial,sans-serif}
 #game{position:fixed;inset:0;width:100vw;height:100vh;display:block}
 
 #rotate{
@@ -23,10 +23,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05001c;font-family:
 #menu{
  position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
  justify-content:center;align-items:center;
- background:linear-gradient(#05001c,#29105c)
+ background:linear-gradient(#58c8e8,#b9f2ff)
 }
 #menu h1{color:white;font-size:clamp(45px,9vw,80px);text-shadow:4px 4px #333}
-#menu p{color:white;font-weight:bold;margin:5px}
+#menu p{color:#333;font-weight:bold;margin:5px}
 #skins{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:1050px;padding:10px}
 
 .skin{
@@ -108,6 +108,10 @@ PARA JOGAR SKY BIRD
 
 <script>
 
+/* =========================
+CANVAS
+========================= */
+
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
@@ -121,7 +125,9 @@ resize();
 window.addEventListener("resize",resize);
 
 
-/* ORIENTAÇÃO */
+/* =========================
+ORIENTAÇÃO
+========================= */
 
 async function forceLandscape(){
 
@@ -141,7 +147,9 @@ async function forceLandscape(){
 }
 
 
-/* SKINS */
+/* =========================
+SKINS
+========================= */
 
 const skins=[
 
@@ -231,6 +239,16 @@ const skins=[
   body:"#ffd21f",
   wing:"#d49b00",
   type:"newyear"
+ },
+
+ /* NOVA SKIN SONIC */
+
+ {
+  name:"🦔 Sonic",
+  price:1000,
+  body:"#168cff",
+  wing:"#075dcc",
+  type:"sonic"
  }
 
 ];
@@ -249,13 +267,16 @@ if(!skins[selectedSkin]){
 }
 
 
-/* SALVAR */
+/* =========================
+SALVAR
+========================= */
 
 function save(){
 
  localStorage.setItem("skyBest",bestScore);
  localStorage.setItem("skyCoins",totalCoins);
  localStorage.setItem("skySkin",selectedSkin);
+
  localStorage.setItem(
   "skyBought",
   JSON.stringify(boughtSkins)
@@ -264,7 +285,9 @@ function save(){
 }
 
 
-/* MENU SKINS */
+/* =========================
+MENU SKINS
+========================= */
 
 function createSkins(){
 
@@ -352,7 +375,9 @@ function createSkins(){
 createSkins();
 
 
-/* JOGO */
+/* =========================
+JOGO
+========================= */
 
 let bird;
 let normalClouds=[];
@@ -372,7 +397,9 @@ let fatalTimer=0;
 let coinTimer=0;
 
 
-/* RESET */
+/* =========================
+RESET
+========================= */
 
 function resetGame(){
 
@@ -403,7 +430,9 @@ function resetGame(){
 }
 
 
-/* COMEÇAR */
+/* =========================
+COMEÇAR
+========================= */
 
 async function startGame(){
 
@@ -424,7 +453,9 @@ async function startGame(){
 }
 
 
-/* PULO */
+/* =========================
+PULO
+========================= */
 
 function flap(){
 
@@ -436,7 +467,9 @@ function flap(){
 }
 
 
-/* CONTROLES */
+/* =========================
+CONTROLES
+========================= */
 
 canvas.addEventListener("pointerdown",e=>{
  e.preventDefault();
@@ -471,7 +504,9 @@ document.getElementById("backMenu").onclick=function(){
 };
 
 
-/* NÚVENS */
+/* =========================
+NÚVENS
+========================= */
 
 function createNormalCloud(){
 
@@ -501,7 +536,9 @@ function createFatalCloud(){
 }
 
 
-/* MOEDAS */
+/* =========================
+MOEDAS
+========================= */
 
 function createCoin(){
 
@@ -517,7 +554,9 @@ function createCoin(){
 }
 
 
-/* PARTÍCULAS */
+/* =========================
+PARTÍCULAS
+========================= */
 
 function particlesAt(x,y,amount,color){
 
@@ -541,7 +580,9 @@ function particlesAt(x,y,amount,color){
 }
 
 
-/* UPDATE */
+/* =========================
+UPDATE
+========================= */
 
 function update(delta){
 
@@ -729,7 +770,7 @@ function update(delta){
 
 
 /* =========================
-CENÁRIO 🌌
+FUNDO 🌌
 ========================= */
 
 function drawBackground(){
@@ -738,47 +779,41 @@ function drawBackground(){
   0,0,0,H
  );
 
- gradient.addColorStop(0,"#03001c");
- gradient.addColorStop(.45,"#100044");
- gradient.addColorStop(1,"#29105c");
+ gradient.addColorStop(0,"#05051c");
+ gradient.addColorStop(.5,"#10104a");
+ gradient.addColorStop(1,"#24245f");
 
  ctx.fillStyle=gradient;
-
- ctx.fillRect(
-  0,
-  0,
-  W,
-  H
- );
+ ctx.fillRect(0,0,W,H);
 
 
  /* ESTRELAS */
 
- const stars=[
-  [.04,.10,2],
-  [.10,.30,1],
-  [.16,.16,2],
-  [.23,.07,1],
-  [.29,.38,2],
-  [.36,.20,1],
-  [.43,.08,2],
-  [.50,.32,1],
-  [.57,.14,2],
-  [.64,.40,1],
-  [.71,.09,2],
-  [.78,.29,1],
-  [.86,.12,2],
-  [.93,.36,1],
-  [.06,.52,1],
-  [.19,.58,2],
-  [.34,.51,1],
-  [.48,.58,2],
-  [.62,.53,1],
-  [.75,.60,2],
-  [.90,.52,1]
- ];
+ ctx.fillStyle="white";
 
- ctx.fillStyle="#ffffff";
+ const stars=[
+  [0.05,0.12,2],
+  [0.12,0.25,1.5],
+  [0.19,0.08,2],
+  [0.27,0.18,1.5],
+  [0.34,0.07,2],
+  [0.41,0.28,1.5],
+  [0.49,0.13,2],
+  [0.56,0.22,1.5],
+  [0.64,0.08,2],
+  [0.71,0.3,1.5],
+  [0.78,0.14,2],
+  [0.86,0.24,1.5],
+  [0.93,0.09,2],
+  [0.97,0.32,1.5],
+  [0.08,0.42,1.5],
+  [0.22,0.36,2],
+  [0.38,0.43,1.5],
+  [0.52,0.38,2],
+  [0.68,0.45,1.5],
+  [0.82,0.39,2],
+  [0.91,0.48,1.5]
+ ];
 
  for(const star of stars){
 
@@ -799,13 +834,13 @@ function drawBackground(){
 
  /* LUA */
 
- ctx.fillStyle="#fff4c4";
+ ctx.fillStyle="#fff4c2";
 
  ctx.beginPath();
 
  ctx.arc(
   W*.82,
-  H*.17,
+  H*.16,
   42,
   0,
   Math.PI*2
@@ -816,74 +851,20 @@ function drawBackground(){
 
  /* CRATERAS */
 
- ctx.fillStyle="#d8d19e";
+ ctx.fillStyle="rgba(180,170,130,.35)";
 
  ctx.beginPath();
 
- ctx.arc(
-  W*.80,
-  H*.14,
-  6,
-  0,
-  Math.PI*2
- );
-
- ctx.arc(
-  W*.85,
-  H*.20,
-  7,
-  0,
-  Math.PI*2
- );
-
- ctx.arc(
-  W*.79,
-  H*.22,
-  4,
-  0,
-  Math.PI*2
- );
+ ctx.arc(W*.80,H*.14,7,0,Math.PI*2);
+ ctx.arc(W*.85,H*.19,5,0,Math.PI*2);
+ ctx.arc(W*.79,H*.21,4,0,Math.PI*2);
 
  ctx.fill();
-
-
- /* PLANETA */
-
- ctx.fillStyle="#e15b91";
-
- ctx.beginPath();
-
- ctx.arc(
-  W*.16,
-  H*.25,
-  18,
-  0,
-  Math.PI*2
- );
-
- ctx.fill();
-
- ctx.strokeStyle="#f3a4c7";
- ctx.lineWidth=4;
-
- ctx.beginPath();
-
- ctx.ellipse(
-  W*.16,
-  H*.25,
-  31,
-  8,
-  -.2,
-  0,
-  Math.PI*2
- );
-
- ctx.stroke();
 
 
  /* CHÃO */
 
- ctx.fillStyle="#17112e";
+ ctx.fillStyle="#15152b";
 
  ctx.fillRect(
   0,
@@ -892,19 +873,21 @@ function drawBackground(){
   45
  );
 
- ctx.fillStyle="#493477";
+ ctx.fillStyle="#29294d";
 
  ctx.fillRect(
   0,
   H-45,
   W,
-  4
+  5
  );
 
 }
 
 
-/* NUVEM NORMAL */
+/* =========================
+NUVEM NORMAL
+========================= */
 
 function drawNormalCloud(cloud){
 
@@ -928,7 +911,9 @@ function drawNormalCloud(cloud){
 }
 
 
-/* NUVEM FATAL */
+/* =========================
+NUVEM FATAL
+========================= */
 
 function drawFatalCloud(cloud){
 
@@ -986,7 +971,9 @@ function drawFatalCloud(cloud){
 }
 
 
-/* MOEDA */
+/* =========================
+MOEDA
+========================= */
 
 function drawCoin(coin){
 
@@ -1024,7 +1011,9 @@ function drawCoin(coin){
 }
 
 
-/* PÁSSARO */
+/* =========================
+PÁSSARO
+========================= */
 
 function drawBird(){
 
@@ -1036,6 +1025,8 @@ function drawBird(){
  ctx.translate(bird.x,bird.y);
  ctx.rotate(bird.rotation);
 
+
+ /* FÊNIX */
 
  if(skin.type==="phoenix"){
 
@@ -1054,6 +1045,8 @@ function drawBird(){
  }
 
 
+ /* SOMBRIO */
+
  if(skin.type==="dark"){
 
   ctx.shadowColor="#8b55ff";
@@ -1061,6 +1054,8 @@ function drawBird(){
 
  }
 
+
+ /* CORPO */
 
  ctx.fillStyle=skin.body;
 
@@ -1070,6 +1065,8 @@ function drawBird(){
 
  ctx.shadowBlur=0;
 
+
+ /* ASA */
 
  ctx.fillStyle=skin.wing;
 
@@ -1088,6 +1085,8 @@ function drawBird(){
  ctx.fill();
 
 
+ /* CAPA */
+
  if(skin.type==="hero"){
 
   ctx.fillStyle="#e21b23";
@@ -1102,6 +1101,8 @@ function drawBird(){
 
  }
 
+
+ /* ROBÔ */
 
  if(skin.type==="robot"){
 
@@ -1132,6 +1133,8 @@ function drawBird(){
  }
 
 
+ /* ALIEN */
+
  if(skin.type==="alien"){
 
   ctx.fillStyle="#111";
@@ -1152,6 +1155,8 @@ function drawBird(){
 
  }
 
+
+ /* ROSQUINHA */
 
  if(skin.type==="donut"){
 
@@ -1200,6 +1205,8 @@ function drawBird(){
  }
 
 
+ /* WAFFLE */
+
  if(skin.type==="waffle"){
 
   ctx.fillStyle="#d58b25";
@@ -1235,15 +1242,29 @@ function drawBird(){
  }
 
 
+ /* NATAL */
+
  if(skin.type==="christmas"){
 
   ctx.fillStyle="#e3262e";
 
   ctx.beginPath();
 
-  ctx.moveTo(-r*.75,-r*.55);
-  ctx.lineTo(r*.55,-r*.55);
-  ctx.lineTo(r*.15,-r*1.5);
+  ctx.moveTo(
+   -r*.75,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   r*.55,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   r*.15,
+   -r*1.5
+  );
+
   ctx.closePath();
 
   ctx.fill();
@@ -1272,15 +1293,29 @@ function drawBird(){
  }
 
 
+ /* HALLOWEEN */
+
  if(skin.type==="halloween"){
 
   ctx.fillStyle="#292333";
 
   ctx.beginPath();
 
-  ctx.moveTo(-r*.8,-r*.55);
-  ctx.lineTo(r*.8,-r*.55);
-  ctx.lineTo(0,-r*1.65);
+  ctx.moveTo(
+   -r*.8,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   r*.8,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   0,
+   -r*1.65
+  );
+
   ctx.closePath();
 
   ctx.fill();
@@ -1317,15 +1352,29 @@ function drawBird(){
  }
 
 
+ /* ANO NOVO */
+
  if(skin.type==="newyear"){
 
   ctx.fillStyle="#7b4dff";
 
   ctx.beginPath();
 
-  ctx.moveTo(-r*.5,-r*.55);
-  ctx.lineTo(r*.5,-r*.55);
-  ctx.lineTo(0,-r*1.7);
+  ctx.moveTo(
+   -r*.5,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   r*.5,
+   -r*.55
+  );
+
+  ctx.lineTo(
+   0,
+   -r*1.7
+  );
+
   ctx.closePath();
 
   ctx.fill();
@@ -1354,6 +1403,84 @@ function drawBird(){
 
  }
 
+
+ /* SONIC 🦔 */
+
+ if(skin.type==="sonic"){
+
+  /* ESPINHOS */
+
+  ctx.fillStyle="#075dcc";
+
+  ctx.beginPath();
+
+  ctx.moveTo(-r*.35,-r*.45);
+
+  ctx.lineTo(-r*1.45,-r*1.2);
+  ctx.lineTo(-r*.7,-r*.85);
+
+  ctx.lineTo(-r*1.55,-r*.55);
+  ctx.lineTo(-r*.7,-r*.25);
+
+  ctx.lineTo(-r*1.35,r*.25);
+  ctx.lineTo(-r*.25,r*.05);
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  /* BARRIGA */
+
+  ctx.fillStyle="#f2c27b";
+
+  ctx.beginPath();
+
+  ctx.arc(
+   -r*.05,
+   r*.22,
+   r*.58,
+   0,
+   Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* SAPATO */
+
+  ctx.fillStyle="#e3262e";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+   r*.35,
+   r*.82,
+   r*.58,
+   r*.23,
+   0,
+   0,
+   Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* FAIXA BRANCA */
+
+  ctx.fillStyle="white";
+
+  ctx.fillRect(
+   r*.02,
+   r*.69,
+   r*.65,
+   r*.12
+  );
+
+ }
+
+
+ /* OLHO */
 
  ctx.fillStyle="white";
 
@@ -1385,6 +1512,8 @@ function drawBird(){
  ctx.fill();
 
 
+ /* BICO */
+
  ctx.fillStyle="#ff8c00";
 
  ctx.beginPath();
@@ -1402,7 +1531,9 @@ function drawBird(){
 }
 
 
-/* DESENHAR */
+/* =========================
+DESENHAR
+========================= */
 
 function draw(){
 
@@ -1442,7 +1573,9 @@ function draw(){
 }
 
 
-/* LOOP */
+/* =========================
+LOOP
+========================= */
 
 function gameLoop(now){
 
@@ -1462,7 +1595,9 @@ function gameLoop(now){
 }
 
 
-/* GAME OVER */
+/* =========================
+GAME OVER
+========================= */
 
 function endGame(){
 
@@ -1490,7 +1625,9 @@ function endGame(){
 }
 
 
-/* INICIAL */
+/* =========================
+INICIAL
+========================= */
 
 resetGame();
 draw();
