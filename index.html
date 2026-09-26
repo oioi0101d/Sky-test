@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SKY BIRD</title>
 
 <style>
@@ -26,7 +26,6 @@ html,body{
     inset:0;
     width:100vw;
     height:100vh;
-    display:block;
 }
 
 #menu{
@@ -204,10 +203,6 @@ html,body{
 
 <script>
 
-/* =========================
-   CANVAS
-========================= */
-
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -215,14 +210,11 @@ let W = 0;
 let H = 0;
 
 function resize(){
-
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
-
 }
 
 resize();
-
 window.addEventListener("resize", resize);
 
 
@@ -264,7 +256,7 @@ const skins = [
         name:"👽 Alien",
         unlock:1000,
         body:"#65ff50",
-        wing:"#269e28
+        wing:"#269e28"
     },
 
     {
@@ -275,6 +267,7 @@ const skins = [
     }
 
 ];
+
 
 let bestScore =
     Number(localStorage.getItem("skyBest") || 0);
@@ -292,10 +285,6 @@ if(
     selectedSkin = 0;
 }
 
-
-/* =========================
-   SALVAR
-========================= */
 
 function save(){
 
@@ -387,7 +376,7 @@ createSkins();
 
 
 /* =========================
-   JOGO
+   VARIÁVEIS
 ========================= */
 
 let bird;
@@ -402,8 +391,6 @@ let runCoins = 0;
 let playing = false;
 
 let lastTime = 0;
-
-/* TEMPO EXATO DA PARTIDA */
 let gameTime = 0;
 
 let cloudTimer = 0;
@@ -441,7 +428,6 @@ function resetGame(){
     score = 0;
     runCoins = 0;
 
-    /* ZERA O RELÓGIO DA PARTIDA */
     gameTime = 0;
 
     cloudTimer = .2;
@@ -461,11 +447,17 @@ function startGame(){
 
     resetGame();
 
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("gameOver").style.display = "none";
+    document.getElementById("menu").style.display =
+        "none";
 
-    document.getElementById("score").style.display = "block";
-    document.getElementById("coinHud").style.display = "block";
+    document.getElementById("gameOver").style.display =
+        "none";
+
+    document.getElementById("score").style.display =
+        "block";
+
+    document.getElementById("coinHud").style.display =
+        "block";
 
     playing = true;
 
@@ -490,10 +482,6 @@ function flap(){
 }
 
 
-/* =========================
-   CONTROLES
-========================= */
-
 canvas.addEventListener(
     "pointerdown",
     function(e){
@@ -504,6 +492,7 @@ canvas.addEventListener(
 
     }
 );
+
 
 document.addEventListener(
     "keydown",
@@ -523,11 +512,13 @@ document.addEventListener(
     }
 );
 
+
 document.getElementById("start").onclick =
     startGame;
 
 document.getElementById("restart").onclick =
     startGame;
+
 
 document.getElementById("backMenu").onclick =
 function(){
@@ -550,7 +541,7 @@ function(){
 
 
 /* =========================
-   NUVEM NORMAL
+   NUVEM
 ========================= */
 
 function createNormalCloud(){
@@ -623,7 +614,6 @@ function particlesAt(
         particles.push({
 
             x:x,
-
             y:y,
 
             vx:
@@ -646,7 +636,7 @@ function particlesAt(
 
 
 /* =========================
-   ATUALIZAR
+   UPDATE
 ========================= */
 
 function update(delta){
@@ -658,16 +648,12 @@ function update(delta){
         );
 
 
-    /* =====================
-       TEMPO REAL DA PARTIDA
-    ===================== */
+    /* TEMPO */
 
     gameTime += delta;
 
 
-    /* =====================
-       GRAVIDADE
-    ===================== */
+    /* GRAVIDADE */
 
     bird.velocity +=
         1150 * delta;
@@ -683,9 +669,7 @@ function update(delta){
     }
 
 
-    /* =====================
-       TIMERS
-    ===================== */
+    /* TIMERS */
 
     cloudTimer -= delta;
     coinTimer -= delta;
@@ -713,14 +697,12 @@ function update(delta){
     }
 
 
-    /* =====================
-       VELOCIDADE 10.000.000
-    ===================== */
+    /* =========================
+       VELOCIDADE ABSURDA
+    ========================= */
 
     const speed = 10000000;
 
-
-    /* NUVENS */
 
     for(const cloud of normalClouds){
 
@@ -731,8 +713,6 @@ function update(delta){
 
     }
 
-
-    /* MOEDAS */
 
     for(const coin of coins){
 
@@ -747,9 +727,7 @@ function update(delta){
     }
 
 
-    /* =====================
-       PEGAR MOEDA
-    ===================== */
+    /* MOEDAS */
 
     for(
         let i=coins.length-1;
@@ -797,9 +775,7 @@ function update(delta){
     }
 
 
-    /* =====================
-       LIMPEZA
-    ===================== */
+    /* LIMPEZA */
 
     normalClouds =
         normalClouds.filter(
@@ -808,9 +784,7 @@ function update(delta){
         );
 
 
-    /* =====================
-       PARTÍCULAS
-    ===================== */
+    /* PARTÍCULAS */
 
     for(
         let i=particles.length-1;
@@ -820,27 +794,18 @@ function update(delta){
 
         const p = particles[i];
 
-        p.x +=
-            p.vx * delta;
-
-        p.y +=
-            p.vy * delta;
-
-        p.life -=
-            delta;
+        p.x += p.vx * delta;
+        p.y += p.vy * delta;
+        p.life -= delta;
 
         if(p.life <= 0){
-
             particles.splice(i,1);
-
         }
 
     }
 
 
-    /* =====================
-       BORDA
-    ===================== */
+    /* BORDA */
 
     if(
         bird.y - bird.radius < 0 ||
@@ -854,18 +819,18 @@ function update(delta){
     }
 
 
-    /* =====================
-       999.999.999 POR SEGUNDO
-    ===================== */
+    /* =========================
+       9.999.999.999 POR SEGUNDO
+    ========================= */
 
     score =
         Math.floor(
             gameTime *
-            999999999
+            9999999999
         );
 
 
-    /* RECORDISTA ATUALIZA DURANTE A PARTIDA */
+    /* RECORDE */
 
     if(score > bestScore){
 
@@ -919,32 +884,28 @@ function drawBackground(){
     );
 
 
-    /* SOL */
-
     ctx.fillStyle =
         "#ffe36b";
 
     ctx.beginPath();
 
     ctx.arc(
-        W * .82,
-        H * .16,
+        W*.82,
+        H*.16,
         38,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
 
-
-    /* CHÃO */
 
     ctx.fillStyle =
         "#79c94a";
 
     ctx.fillRect(
         0,
-        H - 45,
+        H-45,
         W,
         45
     );
@@ -973,33 +934,33 @@ function drawNormalCloud(cloud){
     ctx.arc(
         -40,
         8,
-        cloud.size * .65,
+        cloud.size*.65,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         -10,
         -10,
-        cloud.size * .9,
+        cloud.size*.9,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         25,
         4,
-        cloud.size * .75,
+        cloud.size*.75,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.arc(
         48,
         12,
-        cloud.size * .5,
+        cloud.size*.5,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1049,11 +1010,10 @@ function drawCoin(coin){
         0,
         coin.radius,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
-
     ctx.stroke();
 
     ctx.fillStyle =
@@ -1167,7 +1127,7 @@ function drawBird(){
         0,
         r,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1189,7 +1149,7 @@ function drawBird(){
         r*.38,
         -.3,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1250,7 +1210,7 @@ function drawBird(){
             -r*.2,
             r*.12,
             0,
-            Math.PI * 2
+            Math.PI*2
         );
 
         ctx.fill();
@@ -1274,7 +1234,7 @@ function drawBird(){
             r*.35,
             -.3,
             0,
-            Math.PI * 2
+            Math.PI*2
         );
 
         ctx.fill();
@@ -1294,7 +1254,7 @@ function drawBird(){
         -r*.3,
         r*.28,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1310,7 +1270,7 @@ function drawBird(){
         -r*.3,
         r*.12,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
     ctx.fill();
@@ -1355,38 +1315,18 @@ function draw(){
 
     drawBackground();
 
-    for(
-        const cloud
-        of normalClouds
-    ){
-
-        drawNormalCloud(
-            cloud
-        );
-
+    for(const cloud of normalClouds){
+        drawNormalCloud(cloud);
     }
 
-    for(
-        const coin
-        of coins
-    ){
-
-        drawCoin(
-            coin
-        );
-
+    for(const coin of coins){
+        drawCoin(coin);
     }
 
-    for(
-        const p
-        of particles
-    ){
+    for(const p of particles){
 
         ctx.globalAlpha =
-            Math.max(
-                0,
-                p.life * 2
-            );
+            Math.max(0,p.life*2);
 
         ctx.fillStyle =
             p.color;
@@ -1418,7 +1358,7 @@ function gameLoop(now){
     if(!playing) return;
 
     const delta =
-        (now - lastTime) / 1000;
+        (now-lastTime)/1000;
 
     lastTime = now;
 
@@ -1427,11 +1367,7 @@ function gameLoop(now){
     draw();
 
     if(playing){
-
-        requestAnimationFrame(
-            gameLoop
-        );
-
+        requestAnimationFrame(gameLoop);
     }
 
 }
@@ -1448,9 +1384,7 @@ function endGame(){
     playing = false;
 
     if(score > bestScore){
-
         bestScore = score;
-
     }
 
     totalCoins += runCoins;
@@ -1490,4 +1424,4 @@ draw();
 </script>
 
 </body>
-</html>
+    </html>
