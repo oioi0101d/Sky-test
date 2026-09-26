@@ -2,141 +2,41 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>SKY BIRD</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    touch-action:none;
-}
+*{box-sizing:border-box;margin:0;padding:0;touch-action:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#05001c;font-family:Arial,sans-serif}
+#game{position:fixed;inset:0;width:100vw;height:100vh;display:block}
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#70c5ce;
-    font-family:Arial,sans-serif;
+#rotate{
+ display:none;position:fixed;inset:0;z-index:9999;
+ background:#111;color:white;align-items:center;justify-content:center;
+ text-align:center;font-size:25px;font-weight:bold;padding:30px
 }
-
-#game{
-    position:fixed;
-    inset:0;
-    width:100vw;
-    height:100vh;
+@media(orientation:portrait){
+ #rotate{display:flex}
+ #menu,#gameOver,#score,#coinHud{visibility:hidden}
 }
 
 #menu{
-    position:fixed;
-    inset:0;
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(#58c8e8,#b9f2ff);
+ position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;
+ background:linear-gradient(#58c8e8,#b9f2ff)
 }
-
-#menu h1{
-    color:white;
-    font-size:clamp(45px,9vw,80px);
-    text-shadow:4px 4px #333;
-}
-
-#menu p{
-    color:#333;
-    font-weight:bold;
-    margin:6px;
-}
-
-#skins{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px;
-    max-width:850px;
-    padding:10px;
-}
-
-.skin{
-    min-width:120px;
-    padding:10px;
-    border:3px solid white;
-    border-radius:12px;
-    background:#222;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-}
-
-.skin.selected{
-    border-color:#ffe600;
-    box-shadow:0 0 15px #ffe600;
-}
-
-.skin.locked{
-    opacity:.4;
-}
-
-.button{
-    margin-top:12px;
-    padding:14px 42px;
-    border:0;
-    border-radius:15px;
-    background:#35b84a;
-    color:white;
-    font-size:24px;
-    font-weight:bold;
-}
-
-#score{
-    position:fixed;
-    z-index:5;
-    top:12px;
-    left:50%;
-    transform:translateX(-50%);
-    display:none;
-    color:white;
-    font-size:clamp(30px,5vw,55px);
-    font-weight:bold;
-    text-shadow:4px 4px #333;
-}
-
-#coinHud{
-    position:fixed;
-    z-index:5;
-    top:18px;
-    left:20px;
-    display:none;
-    color:white;
-    font-size:22px;
-    font-weight:bold;
-    text-shadow:3px 3px #333;
-}
-
-#gameOver{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    display:none;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:rgba(0,0,0,.6);
-    color:white;
-}
-
-#gameOver h2{
-    font-size:clamp(45px,8vw,70px);
-    text-shadow:4px 4px #000;
-}
-
-#gameOver p{
-    font-size:22px;
-    margin:6px;
-}
+#menu h1{color:white;font-size:clamp(45px,9vw,80px);text-shadow:4px 4px #333}
+#menu p{color:#333;font-weight:bold;margin:5px}
+#skins{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:1050px;padding:10px}
+.skin{min-width:125px;padding:10px;border:3px solid white;border-radius:12px;background:#222;color:white;font-size:16px;font-weight:bold}
+.skin.selected{border-color:#ffe600;box-shadow:0 0 15px #ffe600}
+.skin.locked{opacity:.45}
+.button{margin-top:12px;padding:14px 42px;border:0;border-radius:15px;background:#35b84a;color:white;font-size:24px;font-weight:bold}
+#score{position:fixed;z-index:5;top:12px;left:50%;transform:translateX(-50%);display:none;color:white;font-size:clamp(30px,5vw,55px);font-weight:bold;text-shadow:4px 4px #333}
+#coinHud{position:fixed;z-index:5;top:18px;left:20px;display:none;color:white;font-size:22px;font-weight:bold;text-shadow:3px 3px #333}
+#gameOver{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;justify-content:center;align-items:center;background:rgba(0,0,0,.6);color:white}
+#gameOver h2{font-size:clamp(45px,8vw,70px);text-shadow:4px 4px #000}
+#gameOver p{font-size:22px;margin:6px}
 </style>
 </head>
 
@@ -144,1284 +44,702 @@ html,body{
 
 <canvas id="game"></canvas>
 
+<div id="rotate">📱<br><br>VIRE O CELULAR DE LADO<br>PARA JOGAR SKY BIRD</div>
+
 <div id="score">0</div>
 
-<div id="coinHud">
-    🪙 <span id="coins">0</span>
-</div>
+<div id="coinHud">🪙 <span id="coins">0</span></div>
 
 <div id="menu">
-
-    <h1>🐦 SKY BIRD</h1>
-
-    <p>Escolha seu pássaro</p>
-
-    <p>
-        🏆 Recorde:
-        <span id="best">0</span>
-        &nbsp;&nbsp;
-        🪙:
-        <span id="totalCoins">0</span>
-    </p>
-
-    <div id="skins"></div>
-
-    <button class="button" id="start">
-        JOGAR
-    </button>
-
+<h1>🐦 SKY BIRD</h1>
+<p>Escolha seu pássaro</p>
+<p>🏆 Recorde: <span id="best">0</span> &nbsp;&nbsp; 🪙 <span id="totalCoins">0</span></p>
+<div id="skins"></div>
+<button class="button" id="start">JOGAR</button>
 </div>
 
 <div id="gameOver">
-
-    <h2>GAME OVER</h2>
-
-    <p>
-        Pontuação:
-        <span id="finalScore">0</span>
-    </p>
-
-    <p>
-        Recorde:
-        <span id="finalBest">0</span>
-    </p>
-
-    <p>
-        🪙 Moedas:
-        <span id="finalCoins">0</span>
-    </p>
-
-    <button class="button" id="restart">
-        JOGAR NOVAMENTE
-    </button>
-
-    <button class="button" id="backMenu">
-        MENU
-    </button>
-
+<h2>GAME OVER</h2>
+<p>Pontuação: <span id="finalScore">0</span></p>
+<p>Recorde: <span id="finalBest">0</span></p>
+<p>🪙 Moedas: <span id="finalCoins">0</span></p>
+<button class="button" id="restart">JOGAR NOVAMENTE</button>
+<button class="button" id="backMenu">MENU</button>
 </div>
 
 <script>
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-let W = 0;
-let H = 0;
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+let W=0,H=0;
 
 function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+ W=canvas.width=window.innerWidth;
+ H=canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+async function forceLandscape(){
+ try{
+  if(document.documentElement.requestFullscreen&&!document.fullscreenElement)
+   await document.documentElement.requestFullscreen();
+ }catch(e){}
+ try{
+  if(screen.orientation&&screen.orientation.lock)
+   await screen.orientation.lock("landscape");
+ }catch(e){}
 }
 
-resize();
-window.addEventListener("resize", resize);
-
-
-/* =========================
-   SKINS
-========================= */
-
-const skins = [
-
-    {
-        name:"🐦 Comum",
-        unlock:0,
-        body:"#ffd21f",
-        wing:"#e5aa00"
-    },
-
-    {
-        name:"🦸 Herói",
-        unlock:100,
-        body:"#2878ff",
-        wing:"#1652b5"
-    },
-
-    {
-        name:"🔥 Fênix",
-        unlock:300,
-        body:"#ff4b16",
-        wing:"#c83200"
-    },
-
-    {
-        name:"🤖 Robô",
-        unlock:500,
-        body:"#9da5ad",
-        wing:"#626970"
-    },
-
-    {
-        name:"👽 Alien",
-        unlock:1000,
-        body:"#65ff50",
-        wing:"#269e28"
-    },
-
-    {
-        name:"🌑 Sombrio",
-        unlock:2000,
-        body:"#292333",
-        wing:"#15111c"
-    }
-
+const skins=[
+{name:"🐦 Comum",unlock:0,body:"#ffd21f",wing:"#e5aa00",type:"normal"},
+{name:"🦸 Herói",unlock:100,body:"#2878ff",wing:"#1652b5",type:"hero"},
+{name:"🔥 Fênix",unlock:300,body:"#ff4b16",wing:"#c83200",type:"phoenix"},
+{name:"🤖 Robô",unlock:500,body:"#9da5ad",wing:"#626970",type:"robot"},
+{name:"👽 Alien",unlock:1000,body:"#65ff50",wing:"#269e28",type:"alien"},
+{name:"🌑 Sombrio",unlock:2000,body:"#292333",wing:"#15111c",type:"dark"},
+{name:"🍩 Rosquinha",unlock:2500,body:"#ffd21f",wing:"#e5aa00",type:"donut"},
+{name:"🧇 Waffle",unlock:3000,body:"#e8a52b",wing:"#b96c16",type:"waffle"},
+{name:"🎅 Natal",price:200,body:"#e3262e",wing:"#b71920",type:"christmas"},
+{name:"🎃 Halloween",price:200,body:"#ff7518",wing:"#bd4100",type:"halloween"},
+{name:"🥳 Ano Novo",price:200,body:"#ffd21f",wing:"#d49b00",type:"newyear"}
 ];
 
+let bestScore=Number(localStorage.getItem("skyBest")||0);
+let totalCoins=Number(localStorage.getItem("skyCoins")||0);
+let selectedSkin=Number(localStorage.getItem("skySkin")||0);
+let boughtSkins=JSON.parse(localStorage.getItem("skyBought")||"[]");
 
-let bestScore =
-    Number(localStorage.getItem("skyBest") || 0);
-
-let totalCoins =
-    Number(localStorage.getItem("skyCoins") || 0);
-
-let selectedSkin =
-    Number(localStorage.getItem("skySkin") || 0);
-
-if(
-    !skins[selectedSkin] ||
-    bestScore < skins[selectedSkin].unlock
-){
-    selectedSkin = 0;
-}
-
+if(!skins[selectedSkin])selectedSkin=0;
 
 function save(){
-
-    localStorage.setItem(
-        "skyBest",
-        bestScore
-    );
-
-    localStorage.setItem(
-        "skyCoins",
-        totalCoins
-    );
-
-    localStorage.setItem(
-        "skySkin",
-        selectedSkin
-    );
-
+ localStorage.setItem("skyBest",bestScore);
+ localStorage.setItem("skyCoins",totalCoins);
+ localStorage.setItem("skySkin",selectedSkin);
+ localStorage.setItem("skyBought",JSON.stringify(boughtSkins));
 }
 
-
-/* =========================
-   MENU
-========================= */
-
 function createSkins(){
+ const box=document.getElementById("skins");
+ box.innerHTML="";
 
-    const box =
-        document.getElementById("skins");
+ skins.forEach((skin,index)=>{
+  const button=document.createElement("button");
+  button.className="skin";
 
-    box.innerHTML = "";
+  const isPaid=skin.price!==undefined;
+  const unlocked=isPaid?boughtSkins.includes(index):bestScore>=skin.unlock;
 
-    skins.forEach((skin,index)=>{
+  if(index===selectedSkin)button.classList.add("selected");
+  if(!unlocked)button.classList.add("locked");
 
-        const button =
-            document.createElement("button");
+  if(unlocked){
+   button.textContent=skin.name+" ✓";
+   button.onclick=()=>{
+    selectedSkin=index;
+    save();
+    createSkins();
+   };
+  }else if(isPaid){
+   button.textContent=skin.name+" 🪙 "+skin.price;
+   button.onclick=()=>{
+    if(totalCoins<skin.price){
+     alert("Você precisa de "+skin.price+" moedas para comprar esta skin!");
+     return;
+    }
+    totalCoins-=skin.price;
+    boughtSkins.push(index);
+    selectedSkin=index;
+    save();
+    createSkins();
+   };
+  }else{
+   button.textContent=skin.name+" 🔒 "+skin.unlock;
+  }
 
-        const unlocked =
-            bestScore >= skin.unlock;
+  box.appendChild(button);
+ });
 
-        button.className = "skin";
-
-        if(index === selectedSkin){
-            button.classList.add("selected");
-        }
-
-        if(!unlocked){
-            button.classList.add("locked");
-        }
-
-        if(unlocked){
-
-            button.textContent =
-                skin.name +
-                (skin.unlock > 0 ? " ✓" : "");
-
-            button.onclick = function(){
-
-                selectedSkin = index;
-
-                save();
-
-                createSkins();
-
-            };
-
-        }else{
-
-            button.textContent =
-                skin.name +
-                " 🔒 " +
-                skin.unlock;
-
-        }
-
-        box.appendChild(button);
-
-    });
-
-    document.getElementById("best").textContent =
-        bestScore;
-
-    document.getElementById("totalCoins").textContent =
-        totalCoins;
-
+ document.getElementById("best").textContent=bestScore;
+ document.getElementById("totalCoins").textContent=totalCoins;
 }
 
 createSkins();
 
-
-/* =========================
-   VARIÁVEIS
-========================= */
-
-let bird;
-
-let normalClouds = [];
-let coins = [];
-let particles = [];
-
-let score = 0;
-let runCoins = 0;
-
-let playing = false;
-
-let lastTime = 0;
-let gameTime = 0;
-
-let cloudTimer = 0;
-let coinTimer = 0;
-
-
-/* =========================
-   RESET
-========================= */
+let bird,normalClouds=[],fatalClouds=[],coins=[],particles=[];
+let score=0,runCoins=0,playing=false,lastTime=0,gameTime=0;
+let cloudTimer=0,fatalTimer=0,coinTimer=0;
 
 function resetGame(){
-
-    bird = {
-
-        x:W * .23,
-
-        y:H * .45,
-
-        velocity:0,
-
-        radius:
-            Math.max(
-                22,
-                Math.min(W,H) * .055
-            ),
-
-        rotation:0
-
-    };
-
-    normalClouds = [];
-    coins = [];
-    particles = [];
-
-    score = 0;
-    runCoins = 0;
-
-    gameTime = 0;
-
-    cloudTimer = .2;
-    coinTimer = .8;
-
-    document.getElementById("score").textContent = "0";
-    document.getElementById("coins").textContent = "0";
-
+ bird={
+  x:W*.23,y:H*.45,velocity:0,
+  radius:Math.max(22,Math.min(W,H)*.055),
+  rotation:0
+ };
+ normalClouds=[];
+ fatalClouds=[];
+ coins=[];
+ particles=[];
+ score=0;
+ runCoins=0;
+ gameTime=0;
+ cloudTimer=.2;
+ fatalTimer=2.5;
+ coinTimer=.8;
+ document.getElementById("score").textContent="0";
+ document.getElementById("coins").textContent="0";
 }
 
-
-/* =========================
-   COMEÇAR
-========================= */
-
-function startGame(){
-
-    resetGame();
-
-    document.getElementById("menu").style.display =
-        "none";
-
-    document.getElementById("gameOver").style.display =
-        "none";
-
-    document.getElementById("score").style.display =
-        "block";
-
-    document.getElementById("coinHud").style.display =
-        "block";
-
-    playing = true;
-
-    lastTime = performance.now();
-
-    requestAnimationFrame(gameLoop);
-
+async function startGame(){
+ await forceLandscape();
+ resetGame();
+ document.getElementById("menu").style.display="none";
+ document.getElementById("gameOver").style.display="none";
+ document.getElementById("score").style.display="block";
+ document.getElementById("coinHud").style.display="block";
+ playing=true;
+ lastTime=performance.now();
+ requestAnimationFrame(gameLoop);
 }
-
-
-/* =========================
-   PULO
-========================= */
 
 function flap(){
-
-    if(!playing) return;
-
-    bird.velocity = -390;
-    bird.rotation = -.5;
-
+ if(!playing)return;
+ bird.velocity=-390;
+ bird.rotation=-.5;
 }
 
+canvas.addEventListener("pointerdown",e=>{
+ e.preventDefault();
+ flap();
+});
 
-canvas.addEventListener(
-    "pointerdown",
-    function(e){
+document.addEventListener("keydown",e=>{
+ if(e.code==="Space"||e.code==="ArrowUp"){
+  e.preventDefault();
+  flap();
+ }
+});
 
-        e.preventDefault();
+document.getElementById("start").onclick=startGame;
+document.getElementById("restart").onclick=startGame;
 
-        flap();
-
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(
-            e.code === "Space" ||
-            e.code === "ArrowUp"
-        ){
-
-            e.preventDefault();
-
-            flap();
-
-        }
-
-    }
-);
-
-
-document.getElementById("start").onclick =
-    startGame;
-
-document.getElementById("restart").onclick =
-    startGame;
-
-
-document.getElementById("backMenu").onclick =
-function(){
-
-    playing = false;
-
-    document.getElementById("gameOver").style.display =
-        "none";
-
-    document.getElementById("menu").style.display =
-        "flex";
-
-    createSkins();
-
-    resetGame();
-
-    draw();
-
+document.getElementById("backMenu").onclick=()=>{
+ playing=false;
+ document.getElementById("gameOver").style.display="none";
+ document.getElementById("menu").style.display="flex";
+ createSkins();
+ resetGame();
+ draw();
 };
 
-
-/* =========================
-   NUVEM
-========================= */
-
 function createNormalCloud(){
-
-    normalClouds.push({
-
-        x:W + 100,
-
-        y:
-            70 +
-            Math.random() *
-            (H * .60),
-
-        size:
-            25 +
-            Math.random() * 20,
-
-        speed:
-            45 +
-            Math.random() * 25
-
-    });
-
+ normalClouds.push({
+  x:W+100,
+  y:70+Math.random()*(H*.60),
+  size:25+Math.random()*20,
+  speed:45+Math.random()*25
+ });
 }
 
-
-/* =========================
-   MOEDA
-========================= */
+function createFatalCloud(){
+ fatalClouds.push({
+  x:W+120,
+  y:70+Math.random()*(H*.60),
+  size:38+Math.random()*12,
+  speed:90+Math.random()*30,
+  pulse:0
+ });
+}
 
 function createCoin(){
-
-    coins.push({
-
-        x:W + 50,
-
-        y:
-            70 +
-            Math.random() *
-            (H * .62),
-
-        radius:15,
-
-        spin:
-            Math.random() *
-            Math.PI * 2
-
-    });
-
+ coins.push({
+  x:W+50,
+  y:70+Math.random()*(H*.62),
+  radius:15,
+  spin:Math.random()*Math.PI*2
+ });
 }
 
-
-/* =========================
-   PARTÍCULAS
-========================= */
-
-function particlesAt(
-    x,
-    y,
-    amount,
-    color
-){
-
-    for(
-        let i=0;
-        i<amount;
-        i++
-    ){
-
-        particles.push({
-
-            x:x,
-            y:y,
-
-            vx:
-                (Math.random()-.5)
-                * 160,
-
-            vy:
-                (Math.random()-.5)
-                * 160,
-
-            life:.5,
-
-            color:color
-
-        });
-
-    }
-
+function particlesAt(x,y,amount,color){
+ for(let i=0;i<amount;i++){
+  particles.push({
+   x,y,
+   vx:(Math.random()-.5)*160,
+   vy:(Math.random()-.5)*160,
+   life:.5,color
+  });
+ }
 }
-
-
-/* =========================
-   UPDATE
-========================= */
 
 function update(delta){
 
-    delta =
-        Math.min(
-            delta,
-            .035
-        );
-
-
-    /* TEMPO */
-
-    gameTime += delta;
-
-
-    /* GRAVIDADE */
-
-    bird.velocity +=
-        1150 * delta;
-
-    bird.y +=
-        bird.velocity * delta;
-
-    bird.rotation +=
-        2 * delta;
-
-    if(bird.rotation > 1){
-        bird.rotation = 1;
-    }
-
-
-    /* TIMERS */
-
-    cloudTimer -= delta;
-    coinTimer -= delta;
-
-
-    if(cloudTimer <= 0){
-
-        createNormalCloud();
-
-        cloudTimer =
-            1.2 +
-            Math.random() * 1.5;
-
-    }
-
-
-    if(coinTimer <= 0){
-
-        createCoin();
-
-        coinTimer =
-            .6 +
-            Math.random() * .8;
-
-    }
-
-
-    /* =========================
-       VELOCIDADE ABSURDA
-    ========================= */
-
-    const speed = 10000000;
-
-
-    for(const cloud of normalClouds){
-
-        cloud.x -=
-            cloud.speed *
-            delta *
-            speed;
-
-    }
-
-
-    for(const coin of coins){
-
-        coin.x -=
-            190 *
-            delta *
-            speed;
-
-        coin.spin +=
-            delta * 7;
-
-    }
-
-
-    /* MOEDAS */
-
-    for(
-        let i=coins.length-1;
-        i>=0;
-        i--
-    ){
-
-        const coin = coins[i];
-
-        const distance =
-            Math.hypot(
-                bird.x - coin.x,
-                bird.y - coin.y
-            );
-
-        if(
-            distance <
-            bird.radius +
-            coin.radius
-        ){
-
-            runCoins++;
-
-            document.getElementById("coins").textContent =
-                runCoins;
-
-            particlesAt(
-                coin.x,
-                coin.y,
-                10,
-                "#ffe600"
-            );
-
-            coins.splice(i,1);
-
-        }
-        else if(
-            coin.x < -60
-        ){
-
-            coins.splice(i,1);
-
-        }
-
-    }
-
-
-    /* LIMPEZA */
-
-    normalClouds =
-        normalClouds.filter(
-            cloud =>
-                cloud.x > -150
-        );
-
-
-    /* PARTÍCULAS */
-
-    for(
-        let i=particles.length-1;
-        i>=0;
-        i--
-    ){
-
-        const p = particles[i];
-
-        p.x += p.vx * delta;
-        p.y += p.vy * delta;
-        p.life -= delta;
-
-        if(p.life <= 0){
-            particles.splice(i,1);
-        }
-
-    }
-
-
-    /* BORDA */
-
-    if(
-        bird.y - bird.radius < 0 ||
-        bird.y + bird.radius > H - 45
-    ){
-
-        endGame();
-
-        return;
-
-    }
-
-
-    /* =========================
-       9.999.999.999 POR SEGUNDO
-    ========================= */
-
-    score =
-        Math.floor(
-            gameTime *
-            9999999999
-        );
-
-
-    /* RECORDE */
-
-    if(score > bestScore){
-
-        bestScore = score;
-
-        localStorage.setItem(
-            "skyBest",
-            bestScore
-        );
-
-    }
-
-
-    document.getElementById("score").textContent =
-        score;
-
+ delta=Math.min(delta,.035);
+ gameTime+=delta;
+
+ bird.velocity+=1150*delta;
+ bird.y+=bird.velocity*delta;
+ bird.rotation+=2*delta;
+
+ if(bird.rotation>1)bird.rotation=1;
+
+ cloudTimer-=delta;
+ fatalTimer-=delta;
+ coinTimer-=delta;
+
+ if(cloudTimer<=0){
+  createNormalCloud();
+  cloudTimer=1.2+Math.random()*1.5;
+ }
+
+ if(fatalTimer<=0){
+  createFatalCloud();
+  fatalTimer=2.2+Math.random()*1.8;
+ }
+
+ if(coinTimer<=0){
+  createCoin();
+  coinTimer=.8+Math.random()*1.2;
+ }
+
+ const speed=1+Math.min(1.5,score/100);
+
+ for(const cloud of normalClouds)
+  cloud.x-=cloud.speed*delta*speed;
+
+ for(const cloud of fatalClouds){
+  cloud.x-=cloud.speed*delta*speed;
+  cloud.pulse+=delta*5;
+ }
+
+ for(const coin of coins){
+  coin.x-=190*delta*speed;
+  coin.spin+=delta*7;
+ }
+
+ for(let i=coins.length-1;i>=0;i--){
+  const coin=coins[i];
+  const distance=Math.hypot(bird.x-coin.x,bird.y-coin.y);
+
+  if(distance<bird.radius+coin.radius){
+   runCoins++;
+   document.getElementById("coins").textContent=runCoins;
+   particlesAt(coin.x,coin.y,10,"#ffe600");
+   coins.splice(i,1);
+  }else if(coin.x<-60){
+   coins.splice(i,1);
+  }
+ }
+
+ for(const cloud of fatalClouds){
+  const distance=Math.hypot(bird.x-cloud.x,bird.y-cloud.y);
+
+  if(distance<bird.radius+cloud.size*.72){
+   particlesAt(bird.x,bird.y,20,"#ff3333");
+   endGame();
+   return;
+  }
+ }
+
+ normalClouds=normalClouds.filter(cloud=>cloud.x>-150);
+ fatalClouds=fatalClouds.filter(cloud=>cloud.x>-150);
+
+ for(let i=particles.length-1;i>=0;i--){
+  const p=particles[i];
+  p.x+=p.vx*delta;
+  p.y+=p.vy*delta;
+  p.life-=delta;
+  if(p.life<=0)particles.splice(i,1);
+ }
+
+ if(bird.y-bird.radius<0||bird.y+bird.radius>H-45){
+  endGame();
+  return;
+ }
+
+ score=Math.floor(gameTime*5);
+ document.getElementById("score").textContent=score;
 }
 
 
-/* =========================
-   FUNDO
-========================= */
+/* =====================================================
+   ÚNICA MUDANÇA: CENÁRIO 🌌
+===================================================== */
 
 function drawBackground(){
 
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            H
-        );
+ const gradient=ctx.createLinearGradient(0,0,0,H);
 
-    gradient.addColorStop(
-        0,
-        "#58c8e8"
-    );
+ gradient.addColorStop(0,"#02000f");
+ gradient.addColorStop(.35,"#08002b");
+ gradient.addColorStop(.7,"#170052");
+ gradient.addColorStop(1,"#30005f");
 
-    gradient.addColorStop(
-        1,
-        "#b9f2ff"
-    );
-
-    ctx.fillStyle = gradient;
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
+ ctx.fillStyle=gradient;
+ ctx.fillRect(0,0,W,H);
 
 
-    ctx.fillStyle =
-        "#ffe36b";
+ /* ESTRELAS */
 
-    ctx.beginPath();
+ for(let i=0;i<120;i++){
 
-    ctx.arc(
-        W*.82,
-        H*.16,
-        38,
-        0,
-        Math.PI*2
-    );
+  const x=(i*137.53)%W;
+  const y=(i*83.71)%(H-45);
+  const size=i%7===0?3:1.5;
 
-    ctx.fill();
+  ctx.globalAlpha=.45+(i%5)*.1;
+  ctx.fillStyle="#fff";
+
+  ctx.fillRect(x,y,size,size);
+ }
+
+ ctx.globalAlpha=1;
 
 
-    ctx.fillStyle =
-        "#79c94a";
+ /* ESTRELAS MAIORES */
 
-    ctx.fillRect(
-        0,
-        H-45,
-        W,
-        45
-    );
+ for(let i=0;i<12;i++){
+
+  const x=(i*311)%W;
+  const y=(i*173)%(H-80);
+
+  ctx.fillStyle="#b9c8ff";
+
+  ctx.beginPath();
+  ctx.arc(x,y,2.5,0,Math.PI*2);
+  ctx.fill();
+ }
+
+
+ /* LUA */
+
+ ctx.fillStyle="#eeeeff";
+
+ ctx.beginPath();
+ ctx.arc(W*.82,H*.18,42,0,Math.PI*2);
+ ctx.fill();
+
+
+ /* CRATERAS */
+
+ ctx.fillStyle="#c8c8df";
+
+ ctx.beginPath();
+ ctx.arc(W*.79,H*.15,7,0,Math.PI*2);
+ ctx.arc(W*.85,H*.20,5,0,Math.PI*2);
+ ctx.arc(W*.80,H*.23,4,0,Math.PI*2);
+ ctx.arc(W*.86,H*.14,3,0,Math.PI*2);
+ ctx.fill();
+
+
+ /* CHÃO ESPACIAL */
+
+ ctx.fillStyle="#111022";
+
+ ctx.fillRect(
+  0,
+  H-45,
+  W,
+  45
+ );
 
 }
 
 
-/* =========================
-   NUVEM
-========================= */
+/* RESTANTE DO JOGO */
 
 function drawNormalCloud(cloud){
-
-    ctx.save();
-
-    ctx.translate(
-        cloud.x,
-        cloud.y
-    );
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.9)";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        -40,
-        8,
-        cloud.size*.65,
-        0,
-        Math.PI*2
-    );
-
-    ctx.arc(
-        -10,
-        -10,
-        cloud.size*.9,
-        0,
-        Math.PI*2
-    );
-
-    ctx.arc(
-        25,
-        4,
-        cloud.size*.75,
-        0,
-        Math.PI*2
-    );
-
-    ctx.arc(
-        48,
-        12,
-        cloud.size*.5,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.restore();
-
+ ctx.save();
+ ctx.translate(cloud.x,cloud.y);
+ ctx.fillStyle="rgba(255,255,255,.9)";
+ ctx.beginPath();
+ ctx.arc(-40,8,cloud.size*.65,0,Math.PI*2);
+ ctx.arc(-10,-10,cloud.size*.9,0,Math.PI*2);
+ ctx.arc(25,4,cloud.size*.75,0,Math.PI*2);
+ ctx.arc(48,12,cloud.size*.5,0,Math.PI*2);
+ ctx.fill();
+ ctx.restore();
 }
 
+function drawFatalCloud(cloud){
+ ctx.save();
+ ctx.translate(cloud.x,cloud.y+Math.sin(cloud.pulse)*3);
+ ctx.shadowColor="#ff3030";
+ ctx.shadowBlur=15;
+ ctx.fillStyle="#5a5a66";
+ ctx.strokeStyle="#292933";
+ ctx.lineWidth=5;
 
-/* =========================
-   MOEDA
-========================= */
+ ctx.beginPath();
+ ctx.arc(-40,8,cloud.size*.65,0,Math.PI*2);
+ ctx.arc(-10,-10,cloud.size*.9,0,Math.PI*2);
+ ctx.arc(25,4,cloud.size*.75,0,Math.PI*2);
+ ctx.arc(48,12,cloud.size*.5,0,Math.PI*2);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.shadowBlur=0;
+ ctx.fillStyle="#ff3333";
+
+ ctx.beginPath();
+ ctx.arc(-17,2,6,0,Math.PI*2);
+ ctx.arc(23,2,6,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.strokeStyle="#ff3333";
+ ctx.lineWidth=4;
+ ctx.beginPath();
+ ctx.moveTo(-22,22);
+ ctx.quadraticCurveTo(2,37,27,21);
+ ctx.stroke();
+
+ ctx.restore();
+}
 
 function drawCoin(coin){
+ ctx.save();
+ ctx.translate(coin.x,coin.y);
 
-    ctx.save();
+ const scale=Math.abs(Math.cos(coin.spin));
+ ctx.scale(Math.max(.25,scale),1);
 
-    ctx.translate(
-        coin.x,
-        coin.y
-    );
+ ctx.fillStyle="#ffd21f";
+ ctx.strokeStyle="#b57b00";
+ ctx.lineWidth=3;
 
-    const scale =
-        Math.abs(
-            Math.cos(
-                coin.spin
-            )
-        );
+ ctx.beginPath();
+ ctx.arc(0,0,coin.radius,0,Math.PI*2);
+ ctx.fill();
+ ctx.stroke();
 
-    ctx.scale(
-        Math.max(.25,scale),
-        1
-    );
+ ctx.fillStyle="#fff3a0";
+ ctx.font="bold 15px Arial";
+ ctx.textAlign="center";
+ ctx.textBaseline="middle";
+ ctx.fillText("$",0,1);
 
-    ctx.fillStyle =
-        "#ffd21f";
-
-    ctx.strokeStyle =
-        "#b57b00";
-
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        0,
-        coin.radius,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle =
-        "#fff3a0";
-
-    ctx.font =
-        "bold 15px Arial";
-
-    ctx.textAlign =
-        "center";
-
-    ctx.textBaseline =
-        "middle";
-
-    ctx.fillText(
-        "$",
-        0,
-        1
-    );
-
-    ctx.restore();
-
+ ctx.restore();
 }
-
-
-/* =========================
-   PÁSSARO
-========================= */
 
 function drawBird(){
 
-    const skin =
-        skins[selectedSkin];
-
-    const r =
-        bird.radius;
-
-    ctx.save();
-
-    ctx.translate(
-        bird.x,
-        bird.y
-    );
-
-    ctx.rotate(
-        bird.rotation
-    );
-
-
-    /* FÊNIX */
-
-    if(selectedSkin === 2){
-
-        ctx.fillStyle =
-            "#ff7a00";
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            -r*.3,
-            r*.3
-        );
-
-        ctx.lineTo(
-            -r*1.8,
-            r*1.3
-        );
-
-        ctx.lineTo(
-            -r*1.1,
-            0
-        );
-
-        ctx.lineTo(
-            -r*1.8,
-            -r
-        );
-
-        ctx.lineTo(
-            -r*.3,
-            -r*.2
-        );
-
-        ctx.fill();
-
-    }
-
-
-    /* SOMBRIO */
-
-    if(selectedSkin === 5){
-
-        ctx.shadowColor =
-            "#8b55ff";
-
-        ctx.shadowBlur =
-            18;
-
-    }
-
-
-    /* CORPO */
-
-    ctx.fillStyle =
-        skin.body;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        0,
-        r,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.shadowBlur = 0;
-
-
-    /* ASA */
-
-    ctx.fillStyle =
-        skin.wing;
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        -r*.3,
-        r*.35,
-        r*.75,
-        r*.38,
-        -.3,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* CAPA */
-
-    if(selectedSkin === 1){
-
-        ctx.fillStyle =
-            "#e21b23";
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            -r*.2,
-            r*.2
-        );
-
-        ctx.lineTo(
-            -r*1.7,
-            r*1.2
-        );
-
-        ctx.lineTo(
-            -r,
-            0
-        );
-
-        ctx.fill();
-
-    }
-
-
-    /* ROBÔ */
-
-    if(selectedSkin === 3){
-
-        ctx.strokeStyle =
-            "#333";
-
-        ctx.lineWidth = 3;
-
-        ctx.strokeRect(
-            -r*.65,
-            -r*.65,
-            r*1.3,
-            r*1.3
-        );
-
-        ctx.fillStyle =
-            "#ff3333";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            r*.35,
-            -r*.2,
-            r*.12,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
-
-
-    /* ALIEN */
-
-    if(selectedSkin === 4){
-
-        ctx.fillStyle =
-            "#111";
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-            r*.35,
-            -r*.2,
-            r*.22,
-            r*.35,
-            -.3,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
-
-
-    /* OLHO */
-
-    ctx.fillStyle =
-        "white";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        r*.45,
-        -r*.3,
-        r*.28,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#111";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        r*.52,
-        -r*.3,
-        r*.12,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* BICO */
-
-    ctx.fillStyle =
-        "#ff8c00";
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        r*.75,
-        0
-    );
-
-    ctx.lineTo(
-        r*1.55,
-        r*.2
-    );
-
-    ctx.lineTo(
-        r*.75,
-        r*.4
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-
-    ctx.restore();
-
+ const skin=skins[selectedSkin];
+ const r=bird.radius;
+
+ ctx.save();
+ ctx.translate(bird.x,bird.y);
+ ctx.rotate(bird.rotation);
+
+ if(skin.type==="phoenix"){
+  ctx.fillStyle="#ff7a00";
+  ctx.beginPath();
+  ctx.moveTo(-r*.3,r*.3);
+  ctx.lineTo(-r*1.8,r*1.3);
+  ctx.lineTo(-r*1.1,0);
+  ctx.lineTo(-r*1.8,-r);
+  ctx.lineTo(-r*.3,-r*.2);
+  ctx.fill();
+ }
+
+ if(skin.type==="dark"){
+  ctx.shadowColor="#8b55ff";
+  ctx.shadowBlur=18;
+ }
+
+ ctx.fillStyle=skin.body;
+ ctx.beginPath();
+ ctx.arc(0,0,r,0,Math.PI*2);
+ ctx.fill();
+ ctx.shadowBlur=0;
+
+ ctx.fillStyle=skin.wing;
+ ctx.beginPath();
+ ctx.ellipse(-r*.3,r*.35,r*.75,r*.38,-.3,0,Math.PI*2);
+ ctx.fill();
+
+ if(skin.type==="hero"){
+  ctx.fillStyle="#e21b23";
+  ctx.beginPath();
+  ctx.moveTo(-r*.2,r*.2);
+  ctx.lineTo(-r*1.7,r*1.2);
+  ctx.lineTo(-r,0);
+  ctx.fill();
+ }
+
+ if(skin.type==="robot"){
+  ctx.strokeStyle="#333";
+  ctx.lineWidth=3;
+  ctx.strokeRect(-r*.65,-r*.65,r*1.3,r*1.3);
+  ctx.fillStyle="#ff3333";
+  ctx.beginPath();
+  ctx.arc(r*.35,-r*.2,r*.12,0,Math.PI*2);
+  ctx.fill();
+ }
+
+ if(skin.type==="alien"){
+  ctx.fillStyle="#111";
+  ctx.beginPath();
+  ctx.ellipse(r*.35,-r*.2,r*.22,r*.35,-.3,0,Math.PI*2);
+  ctx.fill();
+ }
+
+ if(skin.type==="donut"){
+  ctx.fillStyle="#d88932";
+  ctx.beginPath();
+  ctx.arc(0,-r*1.05,r*.48,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle="#ff8fc5";
+  ctx.beginPath();
+  ctx.arc(0,-r*1.05,r*.36,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle=skin.body;
+  ctx.beginPath();
+  ctx.arc(0,-r*1.05,r*.14,0,Math.PI*2);
+  ctx.fill();
+ }
+
+ if(skin.type==="waffle"){
+  ctx.fillStyle="#d58b25";
+  ctx.fillRect(-r*.6,-r*1.45,r*1.2,r*.65);
+  ctx.strokeStyle="#8c5415";
+  ctx.lineWidth=3;
+
+  for(let i=-2;i<=2;i++){
+   ctx.beginPath();
+   ctx.moveTo(i*r*.25,-r*1.45);
+   ctx.lineTo(i*r*.25,-r*.8);
+   ctx.stroke();
+  }
+ }
+
+ if(skin.type==="christmas"){
+  ctx.fillStyle="#e3262e";
+  ctx.beginPath();
+  ctx.moveTo(-r*.75,-r*.55);
+  ctx.lineTo(r*.55,-r*.55);
+  ctx.lineTo(r*.15,-r*1.5);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle="white";
+  ctx.beginPath();
+  ctx.arc(r*.15,-r*1.5,r*.18,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillRect(-r*.8,-r*.65,r*1.4,r*.18);
+ }
+
+ if(skin.type==="halloween"){
+  ctx.fillStyle="#292333";
+  ctx.beginPath();
+  ctx.moveTo(-r*.8,-r*.55);
+  ctx.lineTo(r*.8,-r*.55);
+  ctx.lineTo(0,-r*1.65);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillRect(-r*.95,-r*.65,r*1.9,r*.18);
+
+  ctx.fillStyle="#ffe600";
+  ctx.beginPath();
+  ctx.arc(-r*.3,r*.05,r*.12,0,Math.PI*2);
+  ctx.arc(r*.3,r*.05,r*.12,0,Math.PI*2);
+  ctx.fill();
+ }
+
+ if(skin.type==="newyear"){
+  ctx.fillStyle="#7b4dff";
+  ctx.beginPath();
+  ctx.moveTo(-r*.5,-r*.55);
+  ctx.lineTo(r*.5,-r*.55);
+  ctx.lineTo(0,-r*1.7);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle="#ff3333";
+  ctx.beginPath();
+  ctx.arc(-r*.25,-r*.85,r*.08,0,Math.PI*2);
+  ctx.arc(r*.18,-r*1.1,r*.08,0,Math.PI*2);
+  ctx.fill();
+ }
+
+ ctx.fillStyle="white";
+ ctx.beginPath();
+ ctx.arc(r*.45,-r*.3,r*.28,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.fillStyle="#111";
+ ctx.beginPath();
+ ctx.arc(r*.52,-r*.3,r*.12,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.fillStyle="#ff8c00";
+ ctx.beginPath();
+ ctx.moveTo(r*.75,0);
+ ctx.lineTo(r*1.55,r*.2);
+ ctx.lineTo(r*.75,r*.4);
+ ctx.closePath();
+ ctx.fill();
+
+ ctx.restore();
 }
-
-
-/* =========================
-   DESENHAR
-========================= */
 
 function draw(){
 
-    drawBackground();
+ drawBackground();
 
-    for(const cloud of normalClouds){
-        drawNormalCloud(cloud);
-    }
+ for(const cloud of normalClouds)drawNormalCloud(cloud);
+ for(const cloud of fatalClouds)drawFatalCloud(cloud);
+ for(const coin of coins)drawCoin(coin);
 
-    for(const coin of coins){
-        drawCoin(coin);
-    }
+ for(const p of particles){
+  ctx.globalAlpha=Math.max(0,p.life*2);
+  ctx.fillStyle=p.color;
+  ctx.fillRect(p.x,p.y,5,5);
+ }
 
-    for(const p of particles){
-
-        ctx.globalAlpha =
-            Math.max(0,p.life*2);
-
-        ctx.fillStyle =
-            p.color;
-
-        ctx.fillRect(
-            p.x,
-            p.y,
-            5,
-            5
-        );
-
-    }
-
-    ctx.globalAlpha = 1;
-
-    if(bird){
-        drawBird();
-    }
-
+ ctx.globalAlpha=1;
+ drawBird();
 }
-
-
-/* =========================
-   LOOP
-========================= */
 
 function gameLoop(now){
 
-    if(!playing) return;
+ if(!playing)return;
 
-    const delta =
-        (now-lastTime)/1000;
+ const delta=(now-lastTime)/1000;
+ lastTime=now;
 
-    lastTime = now;
+ update(delta);
+ draw();
 
-    update(delta);
-
-    draw();
-
-    if(playing){
-        requestAnimationFrame(gameLoop);
-    }
-
+ if(playing)requestAnimationFrame(gameLoop);
 }
-
-
-/* =========================
-   GAME OVER
-========================= */
 
 function endGame(){
 
-    if(!playing) return;
+ if(!playing)return;
 
-    playing = false;
+ playing=false;
 
-    if(score > bestScore){
-        bestScore = score;
-    }
+ if(score>bestScore)bestScore=score;
 
-    totalCoins += runCoins;
+ totalCoins+=runCoins;
+ save();
 
-    save();
+ document.getElementById("finalScore").textContent=score;
+ document.getElementById("finalBest").textContent=bestScore;
+ document.getElementById("finalCoins").textContent=runCoins;
 
-    document.getElementById("finalScore").textContent =
-        score;
+ document.getElementById("score").style.display="none";
+ document.getElementById("coinHud").style.display="none";
+ document.getElementById("gameOver").style.display="flex";
 
-    document.getElementById("finalBest").textContent =
-        bestScore;
-
-    document.getElementById("finalCoins").textContent =
-        runCoins;
-
-    document.getElementById("score").style.display =
-        "none";
-
-    document.getElementById("coinHud").style.display =
-        "none";
-
-    document.getElementById("gameOver").style.display =
-        "flex";
-
-    createSkins();
-
+ createSkins();
 }
-
-
-/* =========================
-   INICIAL
-========================= */
 
 resetGame();
 draw();
 
 </script>
-
 </body>
-    </html>
+</html>
